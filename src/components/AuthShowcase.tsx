@@ -1,5 +1,6 @@
 import { FaUser } from "react-icons/fa";
 import Link from "next/link";
+import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 const AuthShowcase = () => {
@@ -21,8 +22,10 @@ const AuthShowcase = () => {
         <div className="flex items-center">
           <div className="mr-4 flex cursor-pointer items-center rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
             {sessionData.user.image ? (
-              <img
-                src={sessionData.user.image ?? "/images/default-avatar.png"}
+              <Image
+                src={sessionData.user.image}
+                width={1200}
+                height={1200}
                 alt="User Avatar"
                 className="h-8 w-8 rounded-full"
               />
