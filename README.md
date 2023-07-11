@@ -2,12 +2,12 @@
 
 ## Scripts
 ```
-    "build": "next build",
-    "dev": "next dev",
-    "lint": "next lint",
-    "start": "next start",
-    "vercel-build": "prisma generate && prisma migrate deploy && next build && npx prisma db push",
-    "prisma:generate": "prisma generate"
+"build": "next build",
+"dev": "next dev",
+"lint": "next lint",
+"start": "next start",
+"vercel-build": "prisma generate && prisma migrate deploy && next build && npx prisma db push",
+"prisma:generate": "prisma generate"
 ```
 
 ## Technology
