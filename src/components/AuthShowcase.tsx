@@ -24,10 +24,10 @@ const AuthShowcase = () => {
             {sessionData.user.image ? (
               <Image
                 src={sessionData.user.image}
-                width={1200}
-                height={1200}
+                width={32}
+                height={32}
                 alt="User Avatar"
-                className="h-8 w-8 rounded-full"
+                className="rounded-full"
               />
             ) : (
               <FaUser className="h-8 w-8 rounded-full" />
