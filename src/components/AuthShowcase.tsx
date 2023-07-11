@@ -32,12 +32,12 @@ const AuthShowcase = () => {
             ) : (
               <FaUser className="h-8 w-8 rounded-full" />
             )}
-            <div className="ml-4 font-semibold text-white">
+            <div className="ml-4 font-thin text-white">
               <Link href="/profile">{sessionData.user.name}</Link>
             </div>
           </div>
           <div
-            className="flex cursor-pointer items-center rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+            className="flex cursor-pointer items-center rounded-full bg-white/10 px-10 py-3 font-thin text-white no-underline transition hover:bg-white/20"
             onClick={() => void signOut()}
           >
             Logout
