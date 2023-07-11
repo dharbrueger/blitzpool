@@ -1,4 +1,4 @@
-# ![image](https://github.com/dharbrueger/blitzpool/assets/46617788/1f65e75b-f840-4792-b135-c87adca99d38)
+![image](https://github.com/dharbrueger/blitzpool/assets/46617788/1f65e75b-f840-4792-b135-c87adca99d38)
 
 ## Scripts
 ```
