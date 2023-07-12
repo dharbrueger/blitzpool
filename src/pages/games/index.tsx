@@ -5,11 +5,7 @@ const GamesPage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>blitzpool - schedules</title>
-        <meta
-          name="description"
-          content="Get access to real time NFL schedule data."
-        />
+        <title>blitzpool - games</title>
       </Head>
       <div className="flex min-h-screen flex-col items-center justify-center"></div>
     </>
