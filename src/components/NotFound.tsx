@@ -10,7 +10,7 @@ const NotFound: React.FC = () => {
       <div className="w-96">
         <Image src={NotFoundImage} alt="Not Found" layout="responsive" width={1200} height={800} />
       </div>
-      <div className={`text-l px-4 rounded-full bg-white/10 px-10 py-3 text-white transition hover:bg-white/20`}>
+      <div className={`text-l px-4 rounded-full bg-white/10 py-3 text-white transition hover:bg-white/20`}>
           <Link href="/">Return Home</Link>
         </div>
     </div>
