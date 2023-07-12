@@ -6,7 +6,7 @@ const Navbar: React.FC = () => {
   const { asPath } = useRouter();
 
   return (
-    <nav className="fixed top-0 w-full text-sm uppercase	text-slate-300">
+    <nav className="top-0 w-full text-md uppercase	text-slate-400">
       <ul className="flex items-center justify-between px-8 py-4">
         <Link href="/">
           <li className="pr-12">
@@ -33,29 +33,29 @@ const Navbar: React.FC = () => {
           </li>
         </Link>
         <li
-          className={`text-l px-4 ${
-            asPath === "/" ? "font-bold text-white" : ""
+          className={`px-4 ${
+            asPath === "/" ? "text-white" : ""
           }`}
         >
           <Link href="/">Dashboard</Link>
         </li>
         <li
-          className={`text-l px-4 ${
-            asPath === "/games" ? "font-bold text-white" : ""
+          className={`px-4 ${
+            asPath === "/games" ? "text-white" : ""
           }`}
         >
           <Link href="/games">Games</Link>
         </li>
         <li
-          className={`text-l px-4 ${
-            asPath === "/schedules" ? "font-bold text-white" : ""
+          className={`px-4 ${
+            asPath === "/schedules" ? "text-white" : ""
           }`}
         >
           <Link href="/schedules">Schedules</Link>
         </li>
         <li
-          className={`text-l px-4 ${
-            asPath === "/support" ? "font-bold text-white" : ""
+          className={`px-4 ${
+            asPath === "/support" ? "text-white" : ""
           }`}
         >
           <Link href="/support">Support</Link>
