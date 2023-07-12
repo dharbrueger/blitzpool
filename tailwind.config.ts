@@ -7,6 +7,9 @@ export default {
       fontFamily: {
         sans: ['Heebo', 'sans-serif'],
       },
+      colors: {
+        'secondary-dark': '#12171D',
+      },
     },
   },
   plugins: [],
