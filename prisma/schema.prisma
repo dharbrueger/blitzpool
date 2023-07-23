@@ -3,7 +3,6 @@
 
 generator client {
     provider = "prisma-client-js"
-    previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
@@ -57,4 +56,18 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Competitor {
+  id                  Int      @id @default(autoincrement())
+  slug                String
+  location            String
+  name                String
+  nickname            String
+  abbreviation        String
+  displayName         String
+  shortDisplayName    String
+  color               String
+  alternateColor      String
+  isActive            Boolean
 }
