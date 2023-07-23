@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
-import { NextPage } from "next";
 import { api } from "../../utils/api";
-import { Game } from "~/server/api/routers/schedules";
 import Head from "next/head";
+import type { NextPage } from "next";
+import type { Game } from "~/server/api/routers/schedules";
 
 type GroupedGames = {
   [key: string]: Game[];
