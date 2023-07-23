@@ -17,6 +17,7 @@ async function main() {
       const data = await response.json();
 
       const {
+        id,
         slug,
         location,
         name,
@@ -31,6 +32,7 @@ async function main() {
 
       await prisma.competitor.create({
         data: {
+          id: parseInt(id),
           slug,
           location,
           name,

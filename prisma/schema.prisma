@@ -59,7 +59,7 @@ model VerificationToken {
 }
 
 model Competitor {
-  id                  Int      @id @default(autoincrement())
+  id                  Int      @id
   slug                String
   location            String
   name                String
