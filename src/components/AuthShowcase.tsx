@@ -10,7 +10,7 @@ const AuthShowcase = () => {
     <div className="text-white">
       {!sessionData && (
           <div
-            className="cursor-pointer rounded-full outline bg-white/10 px-6 py-2 font-light transition hover:bg-white/20"
+            className="cursor-pointer rounded-full outline px-6 py-2 font-light transition hover:bg-white/20"
             onClick={() => void signIn()}
           >
             Log in
