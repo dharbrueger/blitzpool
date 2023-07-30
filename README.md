@@ -10,10 +10,6 @@
 "prisma:generate": "prisma generate"
 ```
 
-## Technology
-I'm using the T3 stack (https://create.t3.gg/) and bootstrapped this project using the create-t3-app CLI.
-I've deployed this app to Vercel and I'm currently using a free tier of Supabase to host my database since I prefer using Postgresql.
-
 ## Inspiration
 I've always wanted a dead simple way to keep track of my and my friends weekly predictions for sports games (mainly NFL) so I thought it would be a fun experiment to translate the traditional pick 'em process into a web application.
 
