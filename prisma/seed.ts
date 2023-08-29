@@ -2,6 +2,20 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+interface ESPN_TEAMS_RESPONSE {
+  id: string;
+  slug: string;
+  location: string;
+  name: string;
+  nickname: string;
+  abbreviation: string;
+  displayName: string;
+  shortDisplayName: string;
+  color: string;
+  alternateColor: string;
+  isActive: boolean;
+}
+
 async function main() {
   try {
     for (let index = 1; index <= 34; index++) {
@@ -14,7 +28,7 @@ async function main() {
       const url = `http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2023/teams/${index}?lang=en&region=us`;
 
       const response = await fetch(url);
-      const data = await response.json();
+      const data = await response.json() as ESPN_TEAMS_RESPONSE;
 
       const {
         id,
@@ -30,9 +44,9 @@ async function main() {
         isActive,
       } = data;
 
-      await prisma.competitor.create({
+      await prisma.team.create({
         data: {
-          id: parseInt(id),
+          id: id,
           slug,
           location,
           name,
