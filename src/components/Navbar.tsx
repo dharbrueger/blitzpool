@@ -7,8 +7,8 @@ import { useSession, signOut } from "next-auth/react";
 const Navbar: React.FC = () => {
   const { data: sessionData } = useSession();
   const { width } = useViewport();
-  const mobileBreakpoint = 640;
-  const isMobileView = width < mobileBreakpoint;
+  const mobileBreakpoint = 820;
+  const isMobileView = width <= mobileBreakpoint;
 
   const links: NavLink[] = [
     { url: "/account", text: "Account" },
