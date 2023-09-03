@@ -1,5 +1,5 @@
 import Link from "next/link";
-import AuthShowcase from "./AuthShowcase";
+import UserIconMenu from "./UserIconMenu";
 import type { NavLink } from "../shared/lib/types";
 import NavLinkRenderer from "./NavLinkRenderer";
 
@@ -36,7 +36,7 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({ links }) => {
       </Link>
       <NavLinkRenderer links={links} isHorizontal className={'ml-6'} />
       <li className="ml-auto">
-        <AuthShowcase />
+        <UserIconMenu />
       </li>
     </ul>
   );

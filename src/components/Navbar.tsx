@@ -11,7 +11,6 @@ const Navbar: React.FC = () => {
   const isMobileView = width <= mobileBreakpoint;
 
   const links: NavLink[] = [
-    { url: "/account", text: "Account" },
     { url: "/", text: "Dashboard" },
     { url: "/games", text: "Games" },
     { url: "/schedules", text: "Schedules" },
@@ -19,6 +18,7 @@ const Navbar: React.FC = () => {
   ];
   
   if (sessionData && isMobileView) {
+    links.unshift({ url: "/account", text: "Account"});
     links.push({ url: "/logout", text: "Logout", onClick: () => void signOut() });
   }
 
