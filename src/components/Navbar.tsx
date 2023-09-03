@@ -2,7 +2,7 @@ import { useViewport } from "../hooks/useViewport";
 import HamburgerMenu from "./HamburgerMenu";
 import type { NavLink } from "../shared/lib/types";
 import DesktopMenu from "./DesktopMenu";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 const Navbar: React.FC = () => {
   const { data: sessionData } = useSession();
@@ -10,12 +10,16 @@ const Navbar: React.FC = () => {
   const mobileBreakpoint = 640;
 
   const links: NavLink[] = [
-    { url: "/account", text: "Account"},
+    { url: "/account", text: "Account" },
     { url: "/", text: "Dashboard" },
     { url: "/games", text: "Games" },
     { url: "/schedules", text: "Schedules" },
     { url: "/support", text: "Support" },
   ];
+  
+  if (sessionData) {
+    links.push({ url: "/logout", text: "Logout", onClick: () => void signOut() });
+  }
 
   return (
     sessionData ? (
