@@ -8,6 +8,7 @@ const Navbar: React.FC = () => {
   const { data: sessionData } = useSession();
   const { width } = useViewport();
   const mobileBreakpoint = 640;
+  const isMobileView = width < mobileBreakpoint;
 
   const links: NavLink[] = [
     { url: "/account", text: "Account" },
@@ -17,17 +18,17 @@ const Navbar: React.FC = () => {
     { url: "/support", text: "Support" },
   ];
   
-  if (sessionData) {
+  if (sessionData && isMobileView) {
     links.push({ url: "/logout", text: "Logout", onClick: () => void signOut() });
   }
 
   return (
     sessionData ? (
       <nav className="flex text-md top-0 w-full uppercase text-slate-400">
-        {width < mobileBreakpoint ? (
+        {isMobileView ? (
           <HamburgerMenu links={links} />
         ) : (
-          <DesktopMenu />
+          <DesktopMenu links={links} />
         )}
       </nav>
     ) : null

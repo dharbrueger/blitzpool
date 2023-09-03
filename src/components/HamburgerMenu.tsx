@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import type { NavLink } from "~/shared/lib/types";
+import NavLinkRenderer from "./NavLinkRenderer";
 
 interface HamburgerMenuProps {
   links: NavLink[];
@@ -10,18 +11,6 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ links }) => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-  };
-
-  const applyMargin = (index: number, length: number) => {
-    if (index === 0) {
-      return "mt-6 mb-6";
-    }
-
-    if (index === length) {
-      return "";
-    } else {
-      return "mb-6";
-    }
   };
 
   return (
@@ -52,26 +41,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ links }) => {
           }`}
         >
           <ul className="text-black">
-            {links.map((link, index) =>
-              link.onClick ? (
-                // Render an <li> element with onClick handler
-                <li key={index} className={applyMargin(index, links.length)}>
-                  <button
-                    onClick={link.onClick}
-                    className="hover:text-blue-500 uppercase"
-                  >
-                    {link.text}
-                  </button>
-                </li>
-              ) : (
-                // Render a regular <li> element with an anchor tag
-                <li key={index} className={applyMargin(index, links.length)}>
-                  <a href={link.url} className="hover:text-blue-500">
-                    {link.text}
-                  </a>
-                </li>
-              )
-            )}
+            <NavLinkRenderer links={links} />
           </ul>
         </div>
       )}

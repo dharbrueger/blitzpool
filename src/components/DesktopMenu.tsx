@@ -1,12 +1,15 @@
 import Link from "next/link";
 import AuthShowcase from "./AuthShowcase";
-import { useRouter } from "next/router";
+import type { NavLink } from "../shared/lib/types";
+import NavLinkRenderer from "./NavLinkRenderer";
 
-const DesktopMenu: React.FC = () => {
-  const { asPath } = useRouter();
+interface DesktopMenuProps {
+  links: NavLink[];
+}
 
+const DesktopMenu: React.FC<DesktopMenuProps> = ({ links }) => {
   return (
-    <ul className="flex flex-col items-center justify-center md:flex-row">
+    <ul className="flex w-full items-center justify-between p-8">
       <Link href="/">
         <li>
           <svg
@@ -31,18 +34,7 @@ const DesktopMenu: React.FC = () => {
           </svg>
         </li>
       </Link>
-      <li className={`${asPath === "/" ? "text-white" : ""}`}>
-        <Link href="/">Dashboard</Link>
-      </li>
-      <li className={`${asPath === "/games" ? "text-white" : ""}`}>
-        <Link href="/games">Games</Link>
-      </li>
-      <li className={`${asPath === "/schedules" ? "text-white" : ""}`}>
-        <Link href="/schedules">Schedules</Link>
-      </li>
-      <li className={`${asPath === "/support" ? "text-white" : ""}`}>
-        <Link href="/support">Support</Link>
-      </li>
+      <NavLinkRenderer links={links} isHorizontal className={'ml-6'} />
       <li className="ml-auto">
         <AuthShowcase />
       </li>
