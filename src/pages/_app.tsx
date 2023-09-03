@@ -15,7 +15,7 @@ const Blitzpool: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   return (
-    <div className={`${raleway.className} bg-gradient-to-b from-[#202232] to-[#0D0D10]`}>
+    <div className={`${raleway.className} min-h-screen bg-gradient-to-b from-[#202232] to-[#0D0D10]`}>
       <SessionProvider session={session}>
         <Navbar />
         <Component {...pageProps} />
