@@ -57,7 +57,7 @@ const AuthForm = () => (
       </button>
     </Form.Submit>
     <div
-      onClick={() => void signIn()}
+      onClick={() => void signIn('google', { callbackUrl: '/' })}
       className="text-violet11 shadow-blackA7 hover:bg-mauve3 mb-[75px] box-border inline-flex h-[35px] w-3/5 cursor-pointer items-center justify-center place-self-center rounded-[4px] bg-white font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none"
     >
       <i className="fab fa-google pr-3"></i> Sign In with Google
