@@ -23,7 +23,7 @@ function getDayOfWeekName(dayOfWeek: number) {
 
 const Card = ({ game }: { game: Game }) => {
   return (
-    <div className="rounded-lg bg-secondary-dark text-black shadow-lg">
+    <div className="rounded-lg bg-secondary-dark text-black shadow-lg p-6 my-6">
       <h3 className="text-l mb-2 font-bold text-white">{game.name}</h3>
       {/* Add more data fields here */}
       <div className="flex justify-end"></div>
@@ -71,7 +71,7 @@ const CardContainer = ({ games }: { games: Game[] }) => {
   );
 };
 
-const SchedulesPage: NextPage = () => {
+export default function SchedulesPage() {
   const [year, setYear] = useState("2023");
   const [week, setWeek] = useState("1");
   const [games, setGames] = useState<Game[]>([]);
@@ -109,7 +109,7 @@ const SchedulesPage: NextPage = () => {
           content="Get access to real-time NFL schedule data."
         />
       </Head>
-      <main className="flex min-h-max flex-col items-start justify-center p-12 mt-48 text-white md:items-center md:p-0">
+      <main className="flex min-h-max flex-col items-start justify-center p-12 md:mt-16 text-white md:items-center md:p-0">
         <div className="flex flex-col">
           <div className="flex flex-col lg:flex-row">
             <div className="flex flex-col">
@@ -145,4 +145,4 @@ const SchedulesPage: NextPage = () => {
   );
 };
 
-export default SchedulesPage;
+SchedulesPage.requireAuth = true;
