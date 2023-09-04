@@ -23,7 +23,7 @@ function getDayOfWeekName(dayOfWeek: number) {
 
 const Card = ({ game }: { game: Game }) => {
   return (
-    <div className="rounded-lg bg-secondary-dark p-4 text-black shadow-lg">
+    <div className="rounded-lg bg-secondary-dark text-black shadow-lg">
       <h3 className="text-l mb-2 font-bold text-white">{game.name}</h3>
       {/* Add more data fields here */}
       <div className="flex justify-end"></div>
@@ -33,6 +33,8 @@ const Card = ({ game }: { game: Game }) => {
 
 const CardContainer = ({ games }: { games: Game[] }) => {
   const groupGamesByDay = () => {
+    if (games.length === 0) return {} as GroupedGames;
+
     const groupedGames: GroupedGames = {
       Thursday: [],
       Sunday: [],
@@ -54,7 +56,7 @@ const CardContainer = ({ games }: { games: Game[] }) => {
   const groupedGames = groupGamesByDay();
 
   return (
-    <div className="grid grid-cols-1 gap-8">
+    <div>
       {Object.entries(groupedGames).map(([day, games]) => (
         <div key={day}>
           <h2 className="text-2xl font-semibold">{day}</h2>
@@ -73,11 +75,11 @@ const SchedulesPage: NextPage = () => {
   const [year, setYear] = useState("2023");
   const [week, setWeek] = useState("1");
   const [games, setGames] = useState<Game[]>([]);
-  const { data: initialScheduleData } = api.schedules.getData.useQuery({
-    year: '2023',
-    week: '1',
-  });
-  const { data: queriedScheduleData }= api.schedules.getData.useQuery({
+
+  const defaultSearch = { year: "2023", week: "1" };
+  const { data: initialScheduleData } =
+    api.schedules.getData.useQuery(defaultSearch);
+  const { data: queriedScheduleData } = api.schedules.getData.useQuery({
     year,
     week,
   });
@@ -107,35 +109,35 @@ const SchedulesPage: NextPage = () => {
           content="Get access to real-time NFL schedule data."
         />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center text-white">
-        <div className="flex">
-          <label className="px-4 uppercase font-bold">
-            Year
-            <input
-              type="number"
-              value={year}
-              className="rounded-md border bg-transparent ml-2 px-2 py-1 text-slate-400 focus:border-slate-400 focus:outline-none"
-              onChange={handleYearChange}
-            />
-          </label>
-          <label className="px-4 uppercase font-bold">
-            Week:
-            <input
-              type="number"
-              value={week}
-              className="rounded-md border bg-transparent ml-2 px-2 py-1 text-slate-400 focus:border-slate-400 focus:outline-none"
-              onChange={handleWeekChange}
-            />
-          </label>
-          <button
-            onClick={handleFetchClick}
-            className="rounded-full bg-white/10 px-4 py-2 text-white transition hover:bg-white/20"
-          >
-            Fetch Schedules
-          </button>
-        </div>
+      <main className="flex min-h-max flex-col items-start justify-center p-12 mt-48 text-white md:items-center md:p-0">
+        <div className="flex flex-col">
+          <div className="flex flex-col lg:flex-row">
+            <div className="flex flex-col">
+              <label className="text-2xl font-bold uppercase">Year</label>
+              <input
+                type="number"
+                value={year}
+                className="rounded-md border bg-transparent p-2 text-2xl text-slate-400 focus:border-slate-400 focus:outline-none"
+                onChange={handleYearChange}
+              />
+            </div>
+            <div className="my-6 flex flex-col md:mx-6 md:my-0">
+              <label className="text-2xl font-bold uppercase">Week:</label>
 
-        <div className="container mx-auto my-8">
+              <input
+                type="number"
+                value={week}
+                className="rounded-md border bg-transparent p-2 text-2xl text-slate-400 focus:border-slate-400 focus:outline-none"
+                onChange={handleWeekChange}
+              />
+            </div>
+            <button
+              onClick={handleFetchClick}
+              className="my-6 rounded-full border-none bg-[#283441] px-16 py-4 text-2xl font-light text-white transition hover:bg-white/20"
+            >
+              Fetch Schedules
+            </button>
+          </div>
           <CardContainer games={games} />
         </div>
       </main>

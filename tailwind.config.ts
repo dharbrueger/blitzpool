@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Rubik', 'sans-serif'],
+        sans: ['Raleway', 'sans-serif'],
       },
       colors: {
         'bp-primary': '#FCFF4B',

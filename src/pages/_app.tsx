@@ -7,6 +7,9 @@ import { AuthProvider } from "~/components/AuthProvider";
 import AuthGuard from "~/components/AuthGuard";
 import type { NextPage } from "next";
 import { SessionProvider } from "next-auth/react";
+import { Raleway } from 'next/font/google';
+const raleway = Raleway({ subsets: ['latin'] });
+
 const Navbar = dynamic(() => import("~/components/Navbar"), {
   ssr: false,
 });
@@ -20,10 +23,9 @@ const Blitzpool: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   const Component = PageComponent as NextApplicationPage;
-  console.log(session);
 
   return (
-    <div className="bg-gradient-to-b from-[#202232] to-[#0D0D10]">
+    <div className={`${raleway.className} min-h-screen bg-gradient-to-b from-[#202232] to-[#0D0D10]`}>
       <SessionProvider session={session}>
         <AuthProvider>
           {/* if requireAuth property is present - protect the page */}
