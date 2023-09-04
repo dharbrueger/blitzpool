@@ -16,3 +16,5 @@ export default function Home() {
     </>
   );
 }
+
+Home.requireAuth = true;
