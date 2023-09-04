@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 
-const GamesPage: NextPage = () => {
+export default function GamesPage() {
   return (
     <>
       <Head>
@@ -10,6 +10,6 @@ const GamesPage: NextPage = () => {
       <div className="flex min-h-screen flex-col items-center justify-center"></div>
     </>
   );
-};
+}
 
-export default GamesPage;
+GamesPage.requireAuth = true;
