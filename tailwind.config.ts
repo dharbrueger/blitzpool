@@ -8,6 +8,7 @@ export default {
         sans: ['Raleway', 'sans-serif'],
       },
       colors: {
+        'bp-primary': '#FCFF4B',
         'secondary-dark': '#12171D',
       },
     },
