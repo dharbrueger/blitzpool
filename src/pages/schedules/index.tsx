@@ -143,6 +143,6 @@ export default function SchedulesPage() {
       </main>
     </>
   );
-};
+}
 
 SchedulesPage.requireAuth = true;
