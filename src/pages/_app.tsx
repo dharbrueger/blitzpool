@@ -25,7 +25,7 @@ const Blitzpool: AppType<{ session: Session | null }> = ({
   const Component = PageComponent as NextApplicationPage;
 
   return (
-    <div className={`${raleway.className} min-h-screen bg-[#0D0D10] bg-gradient-to-b from-[#202232] to-[#0D0D10]`}>
+    <div className={`${raleway.className} min-h-screen bg-gradient-to-b from-[#202232] to-[#0D0D10]`}>
       <SessionProvider session={session}>
         <AuthProvider>
           {/* if requireAuth property is present - protect the page */}
