@@ -4,6 +4,8 @@ import { type AppType } from "next/app";
 import { api } from "~/utils/api";
 import "~/styles/globals.css";
 import dynamic from "next/dynamic";
+import { Raleway } from 'next/font/google';
+const raleway = Raleway({ subsets: ['latin'] });
 const Navbar = dynamic(() => import("~/components/Navbar"), {
   ssr: false,
 });
@@ -13,7 +15,7 @@ const Blitzpool: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   return (
-    <div className="bg-gradient-to-b from-[#202232] to-[#0D0D10]">
+    <div className={`${raleway.className} min-h-screen bg-gradient-to-b from-[#202232] to-[#0D0D10]`}>
       <SessionProvider session={session}>
         <Navbar />
         <Component {...pageProps} />

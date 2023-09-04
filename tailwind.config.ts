@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Heebo', 'sans-serif'],
+        sans: ['Raleway', 'sans-serif'],
       },
       colors: {
         'secondary-dark': '#12171D',
