@@ -15,7 +15,7 @@ export default function Auth() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex min-h-screen flex-col items-center justify-center">
-        <div className="mx-12 mt-24 pb-8">
+        <div className="mb-8">
           <Image src={LogoImage} alt="The Blitzpool logo." quality={100} />
         </div>
         <div className="text-2xl font-light text-white">
