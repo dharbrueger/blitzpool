@@ -2,17 +2,13 @@ import { type Session } from "next-auth";
 import { type AppType } from "next/app";
 import { api } from "~/utils/api";
 import "~/styles/globals.css";
-import dynamic from "next/dynamic";
+import Navbar from "~/components/Navbar";
 import { AuthProvider } from "~/components/AuthProvider";
 import AuthGuard from "~/components/AuthGuard";
 import type { NextPage } from "next";
 import { SessionProvider } from "next-auth/react";
 import { Raleway } from 'next/font/google';
 const raleway = Raleway({ subsets: ['latin'] });
-
-const Navbar = dynamic(() => import("~/components/Navbar"), {
-  ssr: false,
-});
 
 export type NextApplicationPage<P = any, IP = P> = NextPage<P, IP> & {
   requireAuth?: boolean;
