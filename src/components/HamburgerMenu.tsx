@@ -40,14 +40,10 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ links }) => {
         </button>
         {isMenuOpen && (
           <div
-            className={`absolute right-8 top-20 transform-gpu rounded-lg bg-white px-12 py-6 shadow-md ${
-              isMenuOpen
-                ? "scale-y-100 opacity-100 transition-opacity duration-300"
-                : "scale-y-0 opacity-0 transition-opacity duration-300"
-            }`}
+            className={`absolute right-8 top-20 rounded-[20px] bg-[#283441] px-12 py-6 text-white font-light shadow-md`}
           >
-            <ul className="text-black">
-              <NavLinkRenderer links={links} />
+            <ul>
+              <NavLinkRenderer links={links} showIcons />
             </ul>
           </div>
         )}

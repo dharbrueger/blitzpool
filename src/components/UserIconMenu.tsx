@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 
 const UserIconMenu = () => {
-  const {data: sessionData} = useSession();
+  const { data: sessionData } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -17,21 +17,32 @@ const UserIconMenu = () => {
 
   return (
     <div className="text-white">
-      <div className="flex mr-4 text-black">
+      <div className="mr-4 flex text-black">
         <div
-          className="items-center font-semibold transitionhover:bg-white/80 flex cursor-pointer rounded-[20px] text-white mr-4"
+          className="transitionhover:bg-white/80 mr-4 flex cursor-pointer items-center rounded-[20px] font-semibold text-white"
           onClick={toggleMenu}
         >
-          <div className="flex items-center justify-center py-4 px-12 bg-[#283441] rounded-[80px]">
-            <FaUser className="h-6 w-6 mr-4" />
-            <div className='font-light'>{sessionData?.user.name}</div>
+          <div className="flex items-center justify-center rounded-[80px] bg-[#283441] px-12 py-4">
+            <FaUser className="mr-4 h-6 w-6" />
+            <div className="font-light">{sessionData?.user.name}</div>
           </div>
         </div>
-        <div className="items-center font-semibold transitionhover:bg-white/80 flex cursor-pointer rounded-[20px] text-white">
-          <FaBell className="h-6 w-6 mr-4" />
+        <div className="transitionhover:bg-white/80 flex cursor-pointer items-center rounded-[20px] font-semibold text-white">
+          <FaBell className="mr-4 h-6 w-6" />
         </div>
         {isMenuOpen && (
-          <div className="absolute right-16 mt-16 divide-y divide-gray-100 bg-[#283441] text-bp-primary shadow-lg rounded-[80px] cursor-pointer">
+          <div className="absolute right-16 mt-16 cursor-pointer rounded-[80px] bg-[#283441] text-white shadow-lg">
+            <button
+              disabled
+              onClick={() => {
+                void signOut();
+                closeMenu();
+              }}
+              className="flex items-center px-8 py-2 uppercase text-slate-600 cursor-not-allowed"
+            >
+              <FaUser className="mr-2" />
+              Account
+            </button>
             <div
               onClick={() => {
                 void signOut();
