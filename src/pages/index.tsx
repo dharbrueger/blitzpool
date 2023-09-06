@@ -1,6 +1,5 @@
 import Head from "next/head";
 import type { ReactNode } from "react";
-import "@fortawesome/fontawesome-free/css/all.min.css";
 
 interface HomeActionMenuProps {
   children: ReactNode;

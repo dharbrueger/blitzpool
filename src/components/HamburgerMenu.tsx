@@ -3,6 +3,7 @@ import type { NavLink } from "~/shared/lib/types";
 import NavLinkRenderer from "./NavLinkRenderer";
 import LogoImage from "public/logo.png";
 import Image from "next/image";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 interface HamburgerMenuProps {
   links: NavLink[];
