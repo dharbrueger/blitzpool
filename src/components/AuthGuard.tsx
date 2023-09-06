@@ -1,6 +1,7 @@
 import { useAuth } from "./AuthProvider";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { RiseLoader } from "react-spinners";
 
 export default function AuthGuard({ children }: { children: JSX.Element }) {
   const { user, initializing, setRedirect } = useAuth();
@@ -17,13 +18,17 @@ export default function AuthGuard({ children }: { children: JSX.Element }) {
         }
       }
     };
-  
+
     void checkUserAndRedirect();
   }, [initializing, router, user, setRedirect]);
 
   /* show loading indicator while the auth provider is still initializing */
   if (initializing) {
-    return <h1>Application Loading</h1>;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-[#202232] to-[#0D0D10]">
+        <RiseLoader color="#36d7b7" />
+      </div>
+    );
   }
 
   // if auth initialized with a valid user show protected page
