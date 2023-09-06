@@ -17,7 +17,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ links }) => {
   };
 
   return (
-    <div className="flex p-8">
+    <div className="flex w-full p-8 items-center">
       <div className="max-w-[50%]">
         <Image src={LogoImage} alt="The Blitzpool logo." quality={100} />
       </div>
@@ -41,7 +41,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ links }) => {
         </button>
         {isMenuOpen && (
           <div
-            className={`absolute right-8 top-20 rounded-[20px] bg-[#283441] px-12 py-6 text-white font-light shadow-md`}
+            className={`absolute right-8 top-30 rounded-[20px] bg-[#283441] px-12 py-6 text-white font-light shadow-md`}
           >
             <ul>
               <NavLinkRenderer links={links} showIcons />
