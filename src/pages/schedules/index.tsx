@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { api } from "../../utils/api";
 import Head from "next/head";
-import type { NextPage } from "next";
 import type { Game } from "~/server/api/routers/schedules";
 
 type GroupedGames = {
@@ -23,9 +22,9 @@ function getDayOfWeekName(dayOfWeek: number) {
 
 const Card = ({ game }: { game: Game }) => {
   return (
-    <div className="rounded-lg bg-secondary-dark text-black shadow-lg p-6 my-6">
+    <div className="rounded-[20px] bg-gradient-to-br from-[#18323a][#0D0D10] to-[#0D0D10] text-black shadow-lg p-6 my-6">
       <h3 className="text-l mb-2 font-bold text-white">{game.name}</h3>
-      {/* Add more data fields here */}
+      <div className="font-bold text-slate-300">@ {game.status.type.shortDetail}</div>
       <div className="flex justify-end"></div>
     </div>
   );
@@ -122,7 +121,7 @@ export default function SchedulesPage() {
               />
             </div>
             <div className="my-6 flex flex-col md:mx-6 md:my-0">
-              <label className="text-2xl font-bold uppercase">Week:</label>
+              <label className="text-2xl font-bold uppercase">Week</label>
 
               <input
                 type="number"

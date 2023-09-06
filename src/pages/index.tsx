@@ -1,5 +1,37 @@
 import Head from "next/head";
+import type { ReactNode } from "react";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
+interface HomeActionMenuProps {
+  children: ReactNode;
+}
+
+interface HomeActionMenuCardProps {
+  actionName: string;
+  actionIcon: string;
+}
+
+const HomeActionMenu: React.FC<HomeActionMenuProps> = ({ children }) => {
+  return (
+    <div className="text-center bg-[#12171D] rounded-[20px] min-w-[90%] p-8 md:pt-12 md:p-24">
+      <h1 className="text-white font-light uppercase text-4xl mb-6 mt-4">Action Menu</h1>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {children}
+      </div>
+    </div>
+  );
+};
+
+const HomeActionMenuCard: React.FC<HomeActionMenuCardProps> = ({actionName, actionIcon}) => {
+  return (
+    <div className="flex-grow inline-flex flex-col items-center text-center bg-gradient-to-br from-[#12171D] to-[#283441] rounded-[20px] 
+                    p-6 mb-6 md:p-8 md:mx-2 md:mt-4 font-light cursor-pointer outline-none hover:outline-2 hover:outline-[#283441]
+    ">
+      <i className={`text-bp-primary text-7xl fa fa-${actionIcon}`}></i>
+      <h1 className="text-white text-3xl mt-4 uppercase">{actionName}</h1>
+    </div>
+  );
+};
 export default function Home() {
   return (
     <>
@@ -11,7 +43,12 @@ export default function Home() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center">
+      <main className="flex min-h-full flex-col items-center">
+        <HomeActionMenu>
+          <HomeActionMenuCard actionName="Create A Pool" actionIcon="plus" />
+          <HomeActionMenuCard actionName="Join A Pool" actionIcon="user-plus" />
+          <HomeActionMenuCard actionName="View Templates" actionIcon="file" />
+        </HomeActionMenu>
       </main>
     </>
   );
