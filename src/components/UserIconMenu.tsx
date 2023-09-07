@@ -31,7 +31,7 @@ const UserIconMenu = () => {
           <FaBell className="mr-4 h-6 w-6" />
         </div>
         {isMenuOpen && (
-          <div className="absolute right-16 mt-16 cursor-pointer rounded-[80px] bg-[#283441] text-white shadow-lg">
+          <div className="absolute right-16 mt-16 cursor-pointer rounded-[10px] bg-[#283441] text-white shadow-lg">
             <button
               disabled
               onClick={() => {
