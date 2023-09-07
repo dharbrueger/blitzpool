@@ -12,7 +12,7 @@ interface HomeActionMenuCardProps {
 
 const HomeActionMenu: React.FC<HomeActionMenuProps> = ({ children }) => {
   return (
-    <div className="text-center bg-[#12171D] rounded-[20px] min-w-[95%] border-2 border-[#283441] lg:mx-4 p-4">
+    <div className="text-center bg-[#12171D] rounded-[50px] min-w-[95%] border-2 border-[#283441] lg:mx-4 p-[20px]">
       <h1 className="text-white font-light uppercase text-4xl mb-6">Action Menu</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
         {children}
@@ -23,7 +23,7 @@ const HomeActionMenu: React.FC<HomeActionMenuProps> = ({ children }) => {
 
 const HomeActionMenuCard: React.FC<HomeActionMenuCardProps> = ({actionName, actionIcon}) => {
   return (
-    <div className="flex-grow inline-flex flex-col items-center text-center bg-gradient-to-br from-[#12171D] to-[#283441] rounded-[20px] 
+    <div className="flex-grow inline-flex flex-col items-center text-center bg-gradient-to-br from-[#12171D] to-[#283441] rounded-[30px] 
                     p-6 mb-6 md:p-8 md:mx-2 md:mt-4 font-light cursor-pointer outline-none hover:outline-2 hover:outline-[#283441]
     ">
       <i className={`text-bp-primary text-7xl fa fa-${actionIcon}`}></i>
