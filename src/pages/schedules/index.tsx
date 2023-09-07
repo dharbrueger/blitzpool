@@ -26,8 +26,8 @@ const Card = ({ game }: { game: Game }) => {
   
     // Ensure there are two parts (home team and away team)
     if (teams.length === 2) {
-      const homeTeam = teams[1]; // The team after "at" is the home team
-      const awayTeam = teams[0]; // The team before "at" is the away team
+      const homeTeam = teams[1]?.replace(/ /g, '\u00A0');
+      const awayTeam = teams[0]?.replace(/ /g, '\u00A0');
 
       if (!homeTeam || !awayTeam) {
         return null;
@@ -144,7 +144,7 @@ export default function SchedulesPage() {
               <input
                 type="number"
                 value={year}
-                className="rounded-md border bg-transparent p-2 mt-2 text-2xl text-slate-400 focus:border-slate-400 focus:outline-none"
+                className="rounded-[10px] border-2 bg-transparent p-2 mt-2 text-2xl text-slate-400 focus:border-slate-400 focus:outline-none"
                 onChange={handleYearChange}
               />
             </div>
@@ -155,7 +155,7 @@ export default function SchedulesPage() {
               <input
                 type="number"
                 value={week}
-                className="rounded-md border bg-transparent p-2 mt-2 text-2xl text-slate-400 focus:border-slate-400 focus:outline-none"
+                className="rounded-[10px] border-2 bg-transparent p-2 mt-2 text-2xl text-slate-400 focus:border-slate-400 focus:outline-none"
                 onChange={handleWeekChange}
               />
             </div>
