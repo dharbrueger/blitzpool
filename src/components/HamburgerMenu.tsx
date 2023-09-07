@@ -44,7 +44,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ links }) => {
         </button>
         {isMenuOpen && (
           <div
-            className={`absolute right-8 top-30 rounded-[20px] bg-[#283441] px-12 py-6 text-white font-light shadow-md`}
+            className={`absolute right-8 top-30 rounded-[10px] bg-[#283441] px-6 py-2 text-white font-light shadow-md`}
           >
             <ul>
               <NavLinkRenderer links={links} showIcons />

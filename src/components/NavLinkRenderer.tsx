@@ -15,13 +15,13 @@ const NavLinkRenderer: React.FC<NavLinkRendererProps> = ({
 }) => {
   const applyVerticalMargin = (index: number, length: number) => {
     if (index === 0) {
-      return "mt-6 mb-6";
+      return "mt-6 mb-8";
     }
 
     if (index === length) {
       return "";
     } else {
-      return "mb-6";
+      return "mb-8";
     }
   };
 
