@@ -22,7 +22,7 @@ function getDayOfWeekName(dayOfWeek: number) {
 
 const Card = ({ game }: { game: Game }) => {
   return (
-    <div className="rounded-[20px] bg-gradient-to-br from-[#18323a][#0D0D10] to-[#0D0D10] text-black shadow-lg p-6 my-6">
+    <div className="bg-[#12171D] rounded-[20px] border-2 border-[#283441] p-6 my-6">
       <h3 className="text-l mb-2 font-bold text-white">{game.name}</h3>
       <div className="font-bold text-slate-300">@ {game.status.type.shortDetail}</div>
       <div className="flex justify-end"></div>
