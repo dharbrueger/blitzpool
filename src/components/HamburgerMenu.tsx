@@ -4,6 +4,7 @@ import NavLinkRenderer from "./NavLinkRenderer";
 import LogoImage from "public/logo.png";
 import Image from "next/image";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import Link from "next/link";
 
 interface HamburgerMenuProps {
   links: NavLink[];
@@ -19,7 +20,9 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ links }) => {
   return (
     <div className="flex w-full p-8 items-center">
       <div className="max-w-[50%]">
-        <Image src={LogoImage} alt="The Blitzpool logo." quality={100} />
+        <Link href="/">
+          <Image src={LogoImage} alt="The Blitzpool logo." quality={100} />
+        </Link>
       </div>
       <div className="ml-auto">
         <button onClick={toggleMenu} className="text-white focus:outline-none">
