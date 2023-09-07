@@ -12,7 +12,7 @@ interface HomeActionMenuCardProps {
 
 const HomeActionMenu: React.FC<HomeActionMenuProps> = ({ children }) => {
   return (
-    <div className="text-center bg-[#12171D] rounded-[20px] min-w-[95%] border-2 border-[#283441] lg:mx-4 p-4 xl:p-8">
+    <div className="text-center bg-[#12171D] rounded-[20px] min-w-[95%] border-2 border-[#283441] lg:mx-4 p-4">
       <h1 className="text-white font-light uppercase text-4xl mb-6">Action Menu</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
         {children}
@@ -42,7 +42,7 @@ export default function Home() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-full flex-col items-center">
+      <main className="flex min-h-full flex-col items-center pb-6">
         <HomeActionMenu>
           <HomeActionMenuCard actionName="Create A Pool" actionIcon="plus" />
           <HomeActionMenuCard actionName="Join A Pool" actionIcon="user-plus" />
