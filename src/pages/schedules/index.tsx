@@ -83,7 +83,7 @@ const CardContainer = ({ games }: { games: Game[] }) => {
     <div>
       {Object.entries(groupedGames).map(([day, games]) => (
         <div key={day}>
-          <h2 className="text-2xl font-semibold">{day}</h2>
+          <h2 className="text-2xl">{day}</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {games.map((game) => (
               <Card key={game.uid} game={game} />
@@ -137,29 +137,29 @@ export default function SchedulesPage() {
         <div className="flex flex-col p-6">
           <div className="flex flex-col items-center lg:flex-row lg:items-start">
             <div className="flex max-w-fit flex-col">
-              <label className="text-2xl font-bold uppercase">Year</label>
+              <label className="text-2xl uppercase">Year</label>
               <input
                 type="number"
                 value={year}
-                className="rounded-md border bg-transparent p-2 text-2xl text-slate-400 focus:border-slate-400 focus:outline-none"
+                className="rounded-md border bg-transparent p-2 mt-2 text-2xl text-slate-400 focus:border-slate-400 focus:outline-none"
                 onChange={handleYearChange}
               />
             </div>
 
             <div className="my-6 flex max-w-fit flex-col lg:mx-6 lg:my-0">
-              <label className="text-2xl font-bold uppercase">Week</label>
+              <label className="text-2xl uppercase">Week</label>
 
               <input
                 type="number"
                 value={week}
-                className="rounded-md border bg-transparent p-2 text-2xl text-slate-400 focus:border-slate-400 focus:outline-none"
+                className="rounded-md border bg-transparent p-2 mt-2 text-2xl text-slate-400 focus:border-slate-400 focus:outline-none"
                 onChange={handleWeekChange}
               />
             </div>
 
             <button
               onClick={handleFetchClick}
-              className="my-6 max-w-fit rounded-full border-none bg-[#283441] px-16 py-4 text-2xl font-light text-white transition hover:bg-white/20"
+              className="mt-8 max-w-fit rounded-full border-none bg-[#283441] px-16 py-4 text-2xl font-light text-white transition hover:bg-white/20"
             >
               Fetch Schedules
             </button>
