@@ -5,6 +5,7 @@ import {
 } from "~/server/api/trpc";
 
 export interface Game {
+  competitions: Competition[];
   uid: string;
   date: string;
   week: {
@@ -29,6 +30,79 @@ export interface Game {
       shortDetail: string;
     };
   };
+}
+
+interface Competition {
+  date: string;
+  attendance: number;
+  broadcasts: Broadcast[];
+  competitors: Competitor[];
+  conferenceCompetition: boolean;
+  format: {
+    regulation: {
+      periods: number;
+    };
+  };
+  id: string;
+  neutralSite: boolean;
+  odds: Odd[];
+  playByPlayAvailable: boolean;
+  recent: boolean;
+  startDate: string;
+  status: {
+    period: number;
+    displayClock: string;
+    clock: number;
+  };
+  tickets: Ticket[];
+  timeValid: boolean;
+  type: {
+    id: string;
+    abbreviation: string;
+  };
+  uid: string;
+  venue: Venue;
+}
+
+interface Broadcast {
+  market: string;
+  names: string[];
+}
+
+interface Competitor {
+  uid: string;
+  homeAway: string;
+  score: string;
+  // Add more properties as needed
+}
+
+interface Odd {
+  overUnder: number;
+  provider: {
+    name: string;
+    id: string;
+    priority: number;
+  };
+  // Add more properties as needed
+}
+
+interface Ticket {
+  summary: string;
+  numberAvailable: number;
+  // links: TicketLink[];
+}
+
+// interface TicketLink {
+//   // Define the properties of a ticket link if necessary
+// }
+
+interface Venue {
+  address: {
+    city: string;
+    state: string;
+  };
+  fullName: string;
+  // Add more properties as needed
 }
 
 interface Data {

@@ -44,11 +44,14 @@ const Card = ({ game }: { game: Game }) => {
 
   return (
     <div className="my-6 rounded-[20px] border-2 border-[#283441] bg-[#12171D] p-6">
-      <div className="text-l mb-2 font-bold text-white">
+      <div className="text-l mb-2 font-bold text-slate-300">
         <span>{teamsData?.awayTeam}</span> at <span className="text-bp-primary">{teamsData?.homeTeam}</span>
       </div>
-      <div className="text-slate-300">
+      <div className="text-white font-bold">
         {game.status.type.shortDetail}
+      </div>
+      <div className="text-slate-400">
+        {game.competitions[0]?.venue.fullName}
       </div>
       <div className="flex justify-end"></div>
     </div>
