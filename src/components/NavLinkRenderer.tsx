@@ -26,7 +26,7 @@ const NavLinkRenderer: React.FC<NavLinkRendererProps> = ({
   };
 
   return (
-    <ul className={`${className ?? ""} ${isHorizontal ? "flex" : ""}`}>
+    <ul className={`${className ?? ""} ${isHorizontal ? "flex" : ""} select-none`}>
       {links.map((link, index) =>
         link.onClick ? (
           // Render an <li> element with onClick handler

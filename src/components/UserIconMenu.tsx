@@ -22,7 +22,7 @@ const UserIconMenu = () => {
           className="transitionhover:bg-white/80 mr-4 flex cursor-pointer items-center rounded-[20px] font-semibold text-white"
           onClick={toggleMenu}
         >
-          <div className="flex items-center justify-center rounded-[80px] bg-[#283441] px-12 py-4">
+          <div className="flex items-center justify-center rounded-[80px] bg-[#283441] hover:bg-[#303f4e] px-12 py-4 select-none">
             <FaUser className="mr-4 h-6 w-6" />
             <div className="font-light">{sessionData?.user.name}</div>
           </div>

@@ -108,10 +108,11 @@ export default function SchedulesPage() {
           content="Get access to real-time NFL schedule data."
         />
       </Head>
-      <main className="flex min-h-max flex-col items-start justify-center p-12 md:mt-16 text-white md:items-center md:p-0">
-        <div className="flex flex-col">
-          <div className="flex flex-col lg:flex-row">
-            <div className="flex flex-col">
+      <main className="flex min-h-max flex-col md:mt-8 text-white">
+        <div className="flex flex-col p-6">
+          <div className="flex flex-col lg:flex-row items-center lg:items-start">
+
+            <div className="flex flex-col max-w-fit">
               <label className="text-2xl font-bold uppercase">Year</label>
               <input
                 type="number"
@@ -120,7 +121,8 @@ export default function SchedulesPage() {
                 onChange={handleYearChange}
               />
             </div>
-            <div className="my-6 flex flex-col md:mx-6 md:my-0">
+
+            <div className="my-6 flex flex-col lg:mx-6 lg:my-0 max-w-fit">
               <label className="text-2xl font-bold uppercase">Week</label>
 
               <input
@@ -130,15 +132,21 @@ export default function SchedulesPage() {
                 onChange={handleWeekChange}
               />
             </div>
+
             <button
               onClick={handleFetchClick}
-              className="my-6 rounded-full border-none bg-[#283441] px-16 py-4 text-2xl font-light text-white transition hover:bg-white/20"
+              className="my-6 rounded-full border-none bg-[#283441] max-w-fit px-16 py-4 text-2xl font-light text-white transition hover:bg-white/20"
             >
               Fetch Schedules
             </button>
+
           </div>
+        </div>
+
+        <div className="p-6">
           <CardContainer games={games} />
         </div>
+
       </main>
     </>
   );
