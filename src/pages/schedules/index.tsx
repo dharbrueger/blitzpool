@@ -164,7 +164,8 @@ export default function SchedulesPage() {
               onClick={handleFetchClick}
               className="mt-8 max-w-fit rounded-full border-none bg-[#283441] px-16 py-4 text-2xl font-light text-white transition hover:bg-white/20"
             >
-              Fetch Schedules
+              <i className="fa fa-search mr-4"></i>
+              Search&nbsp;Schedules
             </button>
           </div>
         </div>
