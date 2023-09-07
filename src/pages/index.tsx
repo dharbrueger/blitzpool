@@ -44,8 +44,8 @@ export default function Home() {
       </Head>
       <main className="flex min-h-full flex-col items-center pb-6">
         <HomeActionMenu>
-          <HomeActionMenuCard actionName="Create A Pool" actionIcon="plus" />
-          <HomeActionMenuCard actionName="Join A Pool" actionIcon="user-plus" />
+          <HomeActionMenuCard actionName="Create A&nbsp;Pool" actionIcon="plus" />
+          <HomeActionMenuCard actionName="Join A&nbsp;Pool" actionIcon="user-plus" />
           <HomeActionMenuCard actionName="View Templates" actionIcon="file" />
         </HomeActionMenu>
       </main>
