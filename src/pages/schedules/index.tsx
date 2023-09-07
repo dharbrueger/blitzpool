@@ -21,13 +21,15 @@ function getDayOfWeekName(dayOfWeek: number) {
 }
 
 const Card = ({ game }: { game: Game }) => {
-  function parseTeams(inputString: string): { homeTeam: string; awayTeam: string; } | null {
+  function parseTeams(
+    inputString: string
+  ): { homeTeam: string; awayTeam: string } | null {
     const teams = inputString.split(" at ");
-  
+
     // Ensure there are two parts (home team and away team)
     if (teams.length === 2) {
-      const homeTeam = teams[1]?.replace(/ /g, '\u00A0');
-      const awayTeam = teams[0]?.replace(/ /g, '\u00A0');
+      const homeTeam = teams[1]?.replace(/ /g, "\u00A0");
+      const awayTeam = teams[0]?.replace(/ /g, "\u00A0");
 
       if (!homeTeam || !awayTeam) {
         return null;
@@ -45,11 +47,11 @@ const Card = ({ game }: { game: Game }) => {
   return (
     <div className="my-6 rounded-[20px] border-2 border-[#283441] bg-[#12171D] p-6">
       <div className="text-l mb-2 font-bold text-slate-400">
-        <span className="text-slate-100">{teamsData?.awayTeam}</span> <span className="font-normal">at</span> <span className="text-bp-primary">{teamsData?.homeTeam}</span>
+        <span className="text-slate-100">{teamsData?.awayTeam}</span>{" "}
+        <span className="font-normal">at</span>{" "}
+        <span className="text-bp-primary">{teamsData?.homeTeam}</span>
       </div>
-      <div className="text-white font-bold">
-        {game.status.type.shortDetail}
-      </div>
+      <div className="font-bold text-white">{game.status.type.shortDetail}</div>
       <div className="text-slate-400">
         {game.competitions[0]?.venue.fullName}
       </div>
@@ -84,16 +86,18 @@ const CardContainer = ({ games }: { games: Game[] }) => {
 
   return (
     <div>
-      {Object.entries(groupedGames).map(([day, games]) => (
-        <div key={day}>
-          <h2 className="text-2xl">{day}</h2>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {games.map((game) => (
-              <Card key={game.uid} game={game} />
-            ))}
+      {Object.entries(groupedGames).map(([day, games]) =>
+        games.length > 0 ? (
+          <div key={day}>
+            <h2 className="text-2xl">{day}</h2>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {games.map((game) => (
+                <Card key={game.uid} game={game} />
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ) : null
+      )}
     </div>
   );
 };
@@ -144,7 +148,7 @@ export default function SchedulesPage() {
               <input
                 type="number"
                 value={year}
-                className="rounded-[10px] border-2 bg-transparent p-2 mt-2 text-2xl text-slate-400 focus:border-slate-400 focus:outline-none"
+                className="mt-2 rounded-[10px] border-2 bg-transparent p-2 text-2xl text-slate-400 focus:border-slate-400 focus:outline-none"
                 onChange={handleYearChange}
               />
             </div>
@@ -155,7 +159,7 @@ export default function SchedulesPage() {
               <input
                 type="number"
                 value={week}
-                className="rounded-[10px] border-2 bg-transparent p-2 mt-2 text-2xl text-slate-400 focus:border-slate-400 focus:outline-none"
+                className="mt-2 rounded-[10px] border-2 bg-transparent p-2 text-2xl text-slate-400 focus:border-slate-400 focus:outline-none"
                 onChange={handleWeekChange}
               />
             </div>
