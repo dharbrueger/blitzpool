@@ -136,7 +136,7 @@ export default function SchedulesPage() {
           content="Get access to real-time NFL schedule data."
         />
       </Head>
-      <main className="flex min-h-max flex-col text-white md:mt-8">
+      <main className="flex min-h-max flex-col text-white md:mt-8 xl:px-32">
         <div className="flex flex-col p-6">
           <div className="flex flex-col items-center lg:flex-row lg:items-start">
             <div className="flex max-w-fit flex-col">
