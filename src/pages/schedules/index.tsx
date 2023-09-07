@@ -21,10 +21,35 @@ function getDayOfWeekName(dayOfWeek: number) {
 }
 
 const Card = ({ game }: { game: Game }) => {
+  function parseTeams(inputString: string): { homeTeam: string; awayTeam: string; } | null {
+    const teams = inputString.split(" at ");
+  
+    // Ensure there are two parts (home team and away team)
+    if (teams.length === 2) {
+      const homeTeam = teams[1]; // The team after "at" is the home team
+      const awayTeam = teams[0]; // The team before "at" is the away team
+
+      if (!homeTeam || !awayTeam) {
+        return null;
+      }
+
+      return { homeTeam, awayTeam };
+    } else {
+      // Handle invalid input format
+      return null;
+    }
+  }
+
+  const teamsData = parseTeams(game.name);
+
   return (
-    <div className="bg-[#12171D] rounded-[20px] border-2 border-[#283441] p-6 my-6">
-      <h3 className="text-l mb-2 font-bold text-white">{game.name}</h3>
-      <div className="font-bold text-slate-300">@ {game.status.type.shortDetail}</div>
+    <div className="my-6 rounded-[20px] border-2 border-[#283441] bg-[#12171D] p-6">
+      <div className="text-l mb-2 font-bold text-white">
+        <span className="text-bp-primary">{teamsData?.homeTeam}</span> at <span>{teamsData?.awayTeam}</span>
+      </div>
+      <div className="font-bold text-slate-300">
+        @ {game.status.type.shortDetail}
+      </div>
       <div className="flex justify-end"></div>
     </div>
   );
@@ -108,11 +133,10 @@ export default function SchedulesPage() {
           content="Get access to real-time NFL schedule data."
         />
       </Head>
-      <main className="flex min-h-max flex-col md:mt-8 text-white">
+      <main className="flex min-h-max flex-col text-white md:mt-8">
         <div className="flex flex-col p-6">
-          <div className="flex flex-col lg:flex-row items-center lg:items-start">
-
-            <div className="flex flex-col max-w-fit">
+          <div className="flex flex-col items-center lg:flex-row lg:items-start">
+            <div className="flex max-w-fit flex-col">
               <label className="text-2xl font-bold uppercase">Year</label>
               <input
                 type="number"
@@ -122,7 +146,7 @@ export default function SchedulesPage() {
               />
             </div>
 
-            <div className="my-6 flex flex-col lg:mx-6 lg:my-0 max-w-fit">
+            <div className="my-6 flex max-w-fit flex-col lg:mx-6 lg:my-0">
               <label className="text-2xl font-bold uppercase">Week</label>
 
               <input
@@ -135,18 +159,16 @@ export default function SchedulesPage() {
 
             <button
               onClick={handleFetchClick}
-              className="my-6 rounded-full border-none bg-[#283441] max-w-fit px-16 py-4 text-2xl font-light text-white transition hover:bg-white/20"
+              className="my-6 max-w-fit rounded-full border-none bg-[#283441] px-16 py-4 text-2xl font-light text-white transition hover:bg-white/20"
             >
               Fetch Schedules
             </button>
-
           </div>
         </div>
 
         <div className="p-6">
           <CardContainer games={games} />
         </div>
-
       </main>
     </>
   );
