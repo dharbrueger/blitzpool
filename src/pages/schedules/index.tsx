@@ -47,8 +47,8 @@ const Card = ({ game }: { game: Game }) => {
       <div className="text-l mb-2 font-bold text-white">
         <span>{teamsData?.awayTeam}</span> at <span className="text-bp-primary">{teamsData?.homeTeam}</span>
       </div>
-      <div className="font-bold text-slate-300">
-        @ {game.status.type.shortDetail}
+      <div className="text-slate-300">
+        {game.status.type.shortDetail}
       </div>
       <div className="flex justify-end"></div>
     </div>
