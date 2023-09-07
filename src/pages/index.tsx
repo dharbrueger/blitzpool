@@ -12,7 +12,7 @@ interface HomeActionMenuCardProps {
 
 const HomeActionMenu: React.FC<HomeActionMenuProps> = ({ children }) => {
   return (
-    <div className="text-center bg-[#12171D] rounded-[20px] min-w-[90%] border-2 border-[#283441] p-4 lg:mx-4 xl:p-24">
+    <div className="text-center bg-[#12171D] rounded-[20px] min-w-[95%] border-2 border-[#283441] lg:mx-4 p-4 xl:p-8">
       <h1 className="text-white font-light uppercase text-4xl mb-6">Action Menu</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
         {children}
