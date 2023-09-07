@@ -87,7 +87,7 @@ const CardContainer = ({ games }: { games: Game[] }) => {
       {Object.entries(groupedGames).map(([day, games]) => (
         <div key={day}>
           <h2 className="text-2xl">{day}</h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {games.map((game) => (
               <Card key={game.uid} game={game} />
             ))}
