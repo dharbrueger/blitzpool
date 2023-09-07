@@ -46,10 +46,10 @@ const Card = ({ game }: { game: Game }) => {
 
   return (
     <div className="my-6 rounded-[20px] border-2 border-[#283441] bg-[#12171D] p-6">
-      <div className="text-l mb-2 font-bold text-slate-400">
+      <div className="text-l mb-2 font-bold text-slate-400 tracking-wider">
         <span className="text-slate-100">{teamsData?.awayTeam}</span>{" "}
         <span className="font-normal">at</span>{" "}
-        <span className="text-bp-primary">{teamsData?.homeTeam}</span>
+        <span className="text-bp-primary spac">{teamsData?.homeTeam}</span>
       </div>
       <div className="font-bold text-white">{game.status.type.shortDetail}</div>
       <div className="text-slate-400">
