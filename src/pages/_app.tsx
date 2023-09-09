@@ -10,6 +10,7 @@ import { SessionProvider } from "next-auth/react";
 import { Raleway } from 'next/font/google';
 const raleway = Raleway({ subsets: ['latin'] });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type NextApplicationPage<P = any, IP = P> = NextPage<P, IP> & {
   requireAuth?: boolean;
 };
