@@ -27,7 +27,7 @@ const HomeActionMenuCard: React.FC<HomeActionMenuCardProps> = ({actionName, acti
                     p-6 mb-6 md:p-8 md:mx-2 md:mt-4 font-light cursor-pointer outline-none hover:outline-2 hover:outline-[#283441]
     ">
       <i className={`text-bp-primary text-7xl fa fa-${actionIcon}`}></i>
-      <h1 className="text-white text-3xl mt-4 uppercase">{actionName}</h1>
+      <h1 className="text-white text-3xl mt-4 uppercase select-none">{actionName}</h1>
     </div>
   );
 };
