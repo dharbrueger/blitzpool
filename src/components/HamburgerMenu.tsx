@@ -54,7 +54,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ links }) => {
             </svg>
           </button>
           <div
-            className={`top-30 absolute right-8 rounded-[10px] bg-[#283441] px-6 py-2 font-light text-white shadow-md ${
+            className={`top-30 z-10 absolute right-8 rounded-[10px] bg-[#283441] px-6 py-2 font-light text-white shadow-md ${
               !isMenuOpen ? "hidden" : ""
             }`}
           >
