@@ -1,10 +1,8 @@
 import { useRef, useState } from "react";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
-import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import { useClickAway } from "react-use";
 const UserIconMenu = () => {
-  const { data: sessionData } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
@@ -30,9 +28,22 @@ const UserIconMenu = () => {
             className="transitionhover:bg-white/80 mr-4 flex cursor-pointer items-center rounded-[20px] font-semibold text-white"
             onClick={toggleMenu}
           >
-            <div className="flex select-none items-center justify-center rounded-[80px] bg-[#283441] px-12 py-4 hover:bg-[#303f4e]">
-              <FaUser className="mr-4 h-6 w-6" />
-              <div className="font-light">{sessionData?.user.name}</div>
+            <div className="flex gap-4 select-none items-center justify-center rounded-[80px] bg-[#283441] px-12 py-4 hover:bg-[#303f4e]">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-8 w-8"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+              <div className="font-light">Menu</div>
             </div>
           </div>
           {/* <div className="transitionhover:bg-white/80 flex cursor-pointer items-center rounded-[20px] font-semibold text-white">
