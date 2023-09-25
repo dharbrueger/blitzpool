@@ -16,12 +16,17 @@ interface ESPN_TEAMS_RESPONSE {
 }
 
 async function main() {
-  await prisma.poolType.create({
-    data: {
-      name: "NFL Pick 'Em",
-    },
-  });
-  
+  try {
+    await prisma.poolType.create({
+      data: {
+        name: "NFL Pick 'Em",
+      },
+    });
+
+    console.log("Pool types successfully seeded.");
+  } catch (error) {
+    console.error("Error seeding pool type:", error);
+  }
   try {
     for (let index = 1; index <= 34; index++) {
       // hacky but lets us skip the AFC and NFC divisions that the espn api returns on this endpoint

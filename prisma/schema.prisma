@@ -76,7 +76,8 @@ model Team {
 
 model Pool {
   id             String       @id @default(cuid())
-  name           String
+  name           String       @unique
+  private        Boolean      @default(false)
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   typeId         String
@@ -88,7 +89,7 @@ model Pool {
 
 model PoolType {
   id    String @id @default(cuid())
-  name  String
+  name  String @unique
   pools Pool[]
 }
 

@@ -13,11 +13,16 @@ type CreatePoolFormProps = {
 export default function CreatePoolForm({ onClose }: CreatePoolFormProps) {
   const [name, setName] = useState("");
   const [poolTypeId, setPoolTypeId] = useState("");
+  const [isPrivate, setIsPrivate] = useState(false);
   const { data: sessionData } = useSession();
 
   const handlePoolTypeChange = (value: string) => {
     setPoolTypeId(value);
-  }
+  };
+
+  const handlePrivacyCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsPrivate(event.target.checked);
+  };
 
   const { mutate } = api.pools.create.useMutation({
     onSuccess: () => {
@@ -35,7 +40,12 @@ export default function CreatePoolForm({ onClose }: CreatePoolFormProps) {
   });
 
   const handleSubmit = () => {
-    mutate({ name, typeId: poolTypeId, commissionerId: sessionData!.user.id });
+    mutate({
+      name,
+      private: isPrivate,
+      typeId: poolTypeId,
+      commissionerId: sessionData!.user.id 
+    });
   };
 
   return (
@@ -63,10 +73,17 @@ export default function CreatePoolForm({ onClose }: CreatePoolFormProps) {
         </Form.Control>
       </Form.Field>
       <Form.Field className="mb-[10px] grid" name="poolType">
-        <div className="flex items-center">
-          <Form.Label className="mr-6 text-[15px] font-light leading-[35px] text-white">
-            pool type
-          </Form.Label>
+        <div className="flex items-center w-full">
+          <div className="mr-6 text-[15px] font-light leading-[35px] text-white">
+            <div className="flex items-center w-full">
+              <div className="mr-[120px]">pool type</div>
+
+              <div className="flex text-slate-400">
+                <Form.Label className="mr-[5px]">private?</Form.Label>
+                <input type="checkbox" name="poolPrivacy" onChange={handlePrivacyCheckboxChange} />
+              </div>
+            </div>
+          </div>
           <Form.Message
             className="text-left text-[13px] text-red-500 opacity-[0.8]"
             match="valueMissing"
@@ -75,9 +92,10 @@ export default function CreatePoolForm({ onClose }: CreatePoolFormProps) {
           </Form.Message>
         </div>
         <Form.Control asChild>
-          <PoolTypeSelector 
+          <PoolTypeSelector
             onChange={handlePoolTypeChange}
-            className="shadow-blackA9 selection:color-white selection:bg-blackA9 box-border inline-flex h-[35px] w-4/5 appearance-none items-center justify-center rounded-[4px] bg-slate-400 px-[10px] text-[15px] leading-none text-black shadow-[0_0_0_1px] outline-none hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]"/>
+            className="shadow-blackA9 selection:color-white selection:bg-blackA9 box-border inline-flex h-[35px] w-4/5 appearance-none items-center justify-center rounded-[4px] bg-slate-400 px-[10px] text-[15px] leading-none text-black shadow-[0_0_0_1px] outline-none hover:shadow-[0_0_0_1px_black] focus:shadow-[0_0_0_2px_black]"
+          />
         </Form.Control>
       </Form.Field>
       <div className="mt-6 flex flex-col sm:flex-row">

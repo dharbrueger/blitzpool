@@ -3,6 +3,7 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 const poolInput = z.object({
   name: z.string(),
+  private: z.boolean(),
   typeId: z.string(),
   commissionerId: z.string(),
 });
@@ -16,6 +17,7 @@ export const poolsRouter = createTRPCRouter({
         const newPool = await ctx.prisma.pool.create({
           data: {
             name: input.name,
+            private: input.private,
             type: {
               connect: {
                 id: input.typeId,
