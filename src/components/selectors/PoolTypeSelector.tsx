@@ -5,6 +5,7 @@ import { api } from "~/utils/api";
 type PoolTypeSelectorProps = {
   onChange?: (value: string) => void;
   className?: string;
+  optionsClassName?: string;
 };
 type PoolType = {
   id: string;
@@ -24,6 +25,7 @@ const PoolTypeSelector = React.forwardRef<HTMLSelectElement, PoolTypeSelectorPro
       options={options ?? []}
       onChange={props.onChange}
       className={props.className}
+      optionsClassName={props.optionsClassName}
       ref={ref}
     />
   );

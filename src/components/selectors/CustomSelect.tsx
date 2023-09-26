@@ -4,10 +4,11 @@ type CustomSelectProps = {
   options: { value: string; label: string }[];
   onChange?: (value: string) => void;
   className?: string;
+  optionsClassName?: string;
   ref?: React.ForwardedRef<HTMLSelectElement>;
 };
 
-export default function CustomSelect({ options, onChange, className, ref }: CustomSelectProps) {
+export default function CustomSelect({ options, onChange, className, optionsClassName, ref }: CustomSelectProps) {
   const [selectedValue, setSelectedValue] = useState("");
 
   const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -20,9 +21,8 @@ export default function CustomSelect({ options, onChange, className, ref }: Cust
 
   return (
     <select value={selectedValue} onChange={handleSelectChange} className={className} ref={ref}>
-      <option value="">Select an option</option>
       {options.map((option) => (
-        <option key={option.value} value={option.value}>
+        <option key={option.value} className={optionsClassName} value={option.value}>
           {option.label}
         </option>
       ))}
