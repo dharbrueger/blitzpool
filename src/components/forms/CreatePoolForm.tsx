@@ -78,7 +78,7 @@ export default function CreatePoolForm({ onClose }: CreatePoolFormProps) {
             <div className="flex items-center w-full">
               <div className="mr-[120px]">pool type</div>
 
-              <div className="flex text-slate-400">
+              <div className="flex items-center justify-center text-slate-400">
                 <Form.Label className="mr-[5px]">private?</Form.Label>
                 <input type="checkbox" name="poolPrivacy" onChange={handlePrivacyCheckboxChange} />
               </div>
