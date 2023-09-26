@@ -49,7 +49,7 @@ export default function CreatePoolForm({ onClose }: CreatePoolFormProps) {
   };
 
   return (
-    <Form.Root className="grid w-[320px] pointer-events-none">
+    <Form.Root className="grid w-[320px]">
       <Form.Field className="mb-[10px] grid" name="poolName">
         <div className="flex items-center">
           <Form.Label className="mr-6 text-[15px] font-light leading-[35px] text-white">
