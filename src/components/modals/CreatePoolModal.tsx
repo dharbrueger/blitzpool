@@ -16,7 +16,7 @@ export default function CreatePoolModal({
           <Dialog.Title className="mb-4 text-5xl font-light">
             New Pool
           </Dialog.Title>
-          <Dialog.Description className="text-slate-700">
+          <Dialog.Description className="text-slate-500">
             Note: you will be assigned as the pool commissioner.
           </Dialog.Description>
 
