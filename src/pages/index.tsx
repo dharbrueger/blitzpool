@@ -43,7 +43,7 @@ const DashboardPools: React.FC<DashboardPoolsProps> = ({
         work in progress...
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
         {pools.map((pool) => (
           <DashboardPoolCard
             key={pool.id}
@@ -64,17 +64,11 @@ const DashboardPoolCard: React.FC<DashboardPoolCardProps> = ({
 
   return (
     <div
-      className="items-left mb-6 inline-flex flex-grow flex-col rounded-[30px] bg-gradient-to-br from-[#1b232c] via-[#12171D] 
+      className="items-left mb-6 inline-flex max-w-[450px] xl:max-w-full flex-grow flex-col rounded-[30px] bg-gradient-to-br from-[#1b232c] via-[#12171D] 
                     to-[#0D0D10] p-6 font-light outline-none hover:outline-2 hover:outline-[#283441] sm:flex-row
     "
     >
-      <div>
-        <h1 className="mt-4 text-3xl uppercase text-white">{pool.name}</h1>
-        <div className="mb-6 text-xl font-light uppercase text-slate-500">
-          {pool.type.name}
-        </div>
-      </div>
-      <div className="flex flex-1 flex-col items-start justify-center text-xl text-white sm:items-center">
+      <div className="flex sm:flex-col flex-col-reverse mr-4 items-start justify-center text-xl text-white sm:items-center">
         <div>
           <i className="fa fa-user-group">
             <span className="mx-2">{pool.members.length}</span>
@@ -82,10 +76,18 @@ const DashboardPoolCard: React.FC<DashboardPoolCardProps> = ({
         </div>
         {userIsCommissioner && (
           <div className="flex flex-col sm:items-center">
-            <hr className="my-1 hidden h-1 w-20 bg-white sm:block" />
+            <hr className="my-1 hidden h-1 w-10 bg-white sm:block" />
             <div className="font-bold">C</div>
           </div>
         )}
+      </div>
+      <div className="flex-1">
+        <div className="mt-4 max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap text-2xl uppercase text-white sm:max-w-full">
+          {pool.name}
+        </div>
+        <div className="mb-6 text-xl font-light uppercase text-slate-500">
+          {pool.type.name}
+        </div>
       </div>
     </div>
   );
@@ -114,8 +116,8 @@ const HomeActionMenuCard: React.FC<HomeActionMenuCardProps> = ({
   if (!enabled)
     return (
       <div
-        className="mb-6 inline-flex flex-grow cursor-not-allowed flex-col items-center rounded-[30px] grayscale bg-gradient-to-br from-[#12171D] to-[#283441] p-6 
-                    text-center font-light text-gray-700 outline-none hover:outline-2 hover:outline-[#283441] md:mx-2 md:mt-4 md:p-8
+        className="mb-6 inline-flex flex-grow cursor-not-allowed flex-col items-center rounded-[30px] bg-gradient-to-br from-[#12171D] to-[#283441] p-6 text-center 
+                    font-light text-gray-700 outline-none grayscale hover:outline-2 hover:outline-[#283441] md:mx-2 md:mt-4 md:p-8
     "
       >
         <i className={`fa text-7xl fa-${actionIcon}`}></i>
