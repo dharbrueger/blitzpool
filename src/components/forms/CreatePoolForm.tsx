@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as Form from "@radix-ui/react-form";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { api } from "~/utils/api";
 import { toast } from "react-hot-toast";
 import PoolTypeSelector from "../selectors/PoolTypeSelector";
 import { useSession } from "next-auth/react";
+import { type PoolsWithRelations } from "~/pages";
 
 type CreatePoolFormProps = {
   onClose: () => void;
+  loadUserPools: (pools: PoolsWithRelations[]) => void;
 };
 
-export default function CreatePoolForm({ onClose }: CreatePoolFormProps) {
+export default function CreatePoolForm({ onClose, loadUserPools }: CreatePoolFormProps) {
   const [name, setName] = useState("");
   const [poolTypeId, setPoolTypeId] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
@@ -27,8 +29,9 @@ export default function CreatePoolForm({ onClose }: CreatePoolFormProps) {
   };
 
   const { mutate } = api.pools.create.useMutation({
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success("Pool created successfully!");
+      loadUserPools(data);
       onClose();
     },
     onError: (e) => {
@@ -36,12 +39,19 @@ export default function CreatePoolForm({ onClose }: CreatePoolFormProps) {
       if (errorMessage && errorMessage[0]) {
         toast.error(errorMessage[0]);
       } else {
-        toast.error("Failed to post! Please try again later.");
+        toast.error("Something went wrong. Please try again.");
       }
     },
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault();
+
+    if (!name) {
+      toast.error("Please enter a pool name");
+      return;
+    }
+
     mutate({
       name,
       private: isPrivate,
@@ -53,7 +63,6 @@ export default function CreatePoolForm({ onClose }: CreatePoolFormProps) {
   return (
     <Form.Root className="grid w-[280px] md:w-[500px]">
       <Form.Field className="mb-9 grid" name="poolName">
-        <div className="flex items-center max-w-[90%]">
           <Form.Label className="mr-6 text-lg font-light uppercase leading-[35px] text-white">
             pool name
           </Form.Label>
@@ -63,12 +72,11 @@ export default function CreatePoolForm({ onClose }: CreatePoolFormProps) {
           >
             Please enter a pool name
           </Form.Message>
-        </div>
         <Form.Control asChild>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="shadow-blackA9 selection:color-white border-b-2 border-solid border-slate-500 selection:bg-blackA9 box-border inline-flex h-[40px] appearance-none items-center justify-center bg-transparent underline px-[10px] text-lg outline-none"
+            className="shadow-blackA9 selection:color-white border-b-2 border-solid border-slate-500 selection:bg-blackA9 box-border inline-flex h-[40px] appearance-none items-center justify-center bg-transparent text-lg outline-none"
             type="text"
             required
           />
@@ -100,20 +108,18 @@ export default function CreatePoolForm({ onClose }: CreatePoolFormProps) {
         <Form.Control asChild>
           <PoolTypeSelector
             onChange={handlePoolTypeChange}
-            className="border-b-2 border-solid border-slate-500 box-border inline-flex h-[40px] items-center justify-center bg-transparent pr-[10px] text-lg outline-none"
+            className="border-b-2 border-solid border-slate-500 box-border inline-flex h-[40px] items-center justify-center bg-transparent text-lg outline-none"
             optionsClassName="bg-black text-white"
           />
         </Form.Control>
       </Form.Field>
       <div className="mt-6 flex flex-col sm:flex-row">
-        <Form.Submit asChild className="mb-5">
-          <button
-            onClick={handleSubmit}
-            className="mr-6 inline-flex h-[35px] w-full items-center justify-center rounded-[6px] bg-bp-primary p-6 font-light uppercase text-black hover:bg-[#ffef5eb7] sm:w-2/5"
-          >
-            Create
-          </button>
-        </Form.Submit>
+        <button
+          onClick={e => handleSubmit(e)}
+          className="mr-6 inline-flex h-[35px] mb-4 w-full items-center justify-center rounded-[6px] bg-bp-primary p-6 font-light uppercase text-black hover:bg-[#ffef5eb7] sm:w-2/5"
+        >
+          Create
+        </button>
         <button
           className="inline-flex h-[35px] items-center justify-center rounded-[6px] bg-transparent border-2 border-b-2 border-solid px-4 py-6 font-light uppercase text-white hover:bg-[#2834418a] sm:w-2/5"
           onClick={onClose}

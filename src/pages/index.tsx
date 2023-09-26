@@ -1,7 +1,8 @@
 import { type Prisma } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { useState, type ReactNode } from "react";
+import { useState, useEffect, type ReactNode } from "react";
+import { Toaster } from "react-hot-toast";
 import CreatePoolModal from "~/components/modals/CreatePoolModal";
 import { api } from "~/utils/api";
 
@@ -21,7 +22,7 @@ type DashboardPoolsProps = {
   currentUserId?: string;
 };
 
-type PoolsWithRelations = Prisma.PoolGetPayload<{
+export type PoolsWithRelations = Prisma.PoolGetPayload<{
   include: { type: true; commissioner: true; members: true };
 }>;
 
@@ -64,11 +65,11 @@ const DashboardPoolCard: React.FC<DashboardPoolCardProps> = ({
 
   return (
     <div
-      className="items-left mb-6 inline-flex max-w-[450px] xl:max-w-full flex-grow flex-col rounded-[30px] bg-gradient-to-br from-[#1b232c] via-[#12171D] 
-                    to-[#0D0D10] p-6 font-light outline-none hover:outline-2 hover:outline-[#283441] sm:flex-row
+      className="items-left mb-6 inline-flex max-w-[450px] flex-grow flex-col rounded-[30px] bg-gradient-to-br from-[#1b232c] via-[#12171D] to-[#0D0D10] 
+                    p-6 font-light outline-none hover:outline-2 hover:outline-[#283441] sm:flex-row xl:max-w-full
     "
     >
-      <div className="flex sm:flex-col flex-col-reverse mr-4 items-start justify-center text-xl text-white sm:items-center">
+      <div className="mr-4 flex flex-col-reverse items-start justify-center text-xl text-white sm:flex-col sm:items-center">
         <div>
           <i className="fa fa-user-group">
             <span className="mx-2">{pool.members.length}</span>
@@ -139,12 +140,22 @@ const HomeActionMenuCard: React.FC<HomeActionMenuCardProps> = ({
 };
 export default function Home() {
   const [isCreatePoolModalOpen, setIsCreatePoolModalOpen] = useState(false);
+  const [userPools, setUserPools] = useState([] as PoolsWithRelations[]);
   const { data: sessionData } = useSession();
   const currentUserId = sessionData?.user.id ?? "";
 
-  const userPools = api.pools.userPools.useQuery({
+  const pools = api.pools.userPools.useQuery({
     userId: currentUserId,
   }).data;
+
+  const loadUserPools = (pools: PoolsWithRelations[]) => {
+    setUserPools(pools);
+  };
+
+  useEffect(() => {
+    setUserPools(pools ?? []);
+  }, [pools]);
+
 
   return (
     <>
@@ -157,9 +168,31 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-full flex-col items-center pb-6">
+        <Toaster
+          position="top-center"
+          reverseOrder={false}
+          gutter={24}
+          containerClassName=""
+          containerStyle={{}}
+          toastOptions={{
+            // Define default options
+            className: "",
+            duration: 2000,
+            style: {
+              background: "#363636",
+              color: "#fff",
+            },
+
+            // Default options for specific types
+            success: {
+              duration: 3000,
+            },
+          }}
+        />
         <CreatePoolModal
           isOpen={isCreatePoolModalOpen}
           onClose={() => setIsCreatePoolModalOpen(false)}
+          loadUserPools={loadUserPools}
         />
         <div className="flex w-full flex-col items-center gap-4">
           <HomeActionMenu>

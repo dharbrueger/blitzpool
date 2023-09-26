@@ -31,7 +31,7 @@ export const poolsRouter = createTRPCRouter({
                 id: input.commissionerId,
               },
             },
-          }
+          },
         });
 
         await ctx.prisma.membership.create({
@@ -49,51 +49,64 @@ export const poolsRouter = createTRPCRouter({
           },
         });
 
-        return newPool;
-      } catch (error) {
-        throw new Error("Failed to create pool");
-      }
-    }),
-    publicList: publicProcedure.query(async ({ ctx }) => {
-      try {
-        const pools = await ctx.prisma.pool.findMany({
+        return await ctx.prisma.pool.findMany({
           where: {
-            private: false,
+            members: {
+              some: {
+                userId: input.commissionerId,
+              },
+            },
           },
           include: {
             commissioner: true,
             type: true,
             members: true,
-          }
+          },
         });
-  
+      } catch (error) {
+        throw new Error("Failed to create pool");
+      }
+    }),
+  publicList: publicProcedure.query(async ({ ctx }) => {
+    try {
+      const pools = await ctx.prisma.pool.findMany({
+        where: {
+          private: false,
+        },
+        include: {
+          commissioner: true,
+          type: true,
+          members: true,
+        },
+      });
+
+      return pools;
+    } catch (error) {
+      throw new Error("Failed to get pools");
+    }
+  }),
+  userPools: publicProcedure
+    .input(userPoolsInput)
+    .query(async ({ ctx, input }) => {
+      try {
+        const pools = await ctx.prisma.pool.findMany({
+          where: {
+            members: {
+              some: {
+                userId: input.userId,
+              },
+            },
+          },
+          include: {
+            commissioner: true,
+            type: true,
+            members: true,
+          },
+        });
+
         return pools;
       } catch (error) {
         throw new Error("Failed to get pools");
       }
     }),
-    userPools: publicProcedure
-      .input(userPoolsInput)
-      .query(async ({ ctx, input }) => {
-        try {
-          const pools = await ctx.prisma.pool.findMany({
-            where: {
-              members: {
-                some: {
-                  userId: input.userId,
-                },
-              },
-            },
-            include: {
-              commissioner: true,
-              type: true,
-              members: true,
-            }
-          });
-    
-          return pools;
-        } catch (error) {
-          throw new Error("Failed to get pools");
-        }
-      }),
 });

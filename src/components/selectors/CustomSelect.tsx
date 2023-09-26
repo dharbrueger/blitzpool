@@ -1,4 +1,4 @@
-import React, { type ChangeEvent, useState } from 'react';
+import React, { type ChangeEvent, useState, useEffect } from 'react';
 
 type CustomSelectProps = {
   options: { value: string; label: string }[];
@@ -9,7 +9,7 @@ type CustomSelectProps = {
 };
 
 export default function CustomSelect({ options, onChange, className, optionsClassName, ref }: CustomSelectProps) {
-  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedValue, setSelectedValue] = useState(options[0]?.value ?? '');
 
   const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const newValue = event.target.value;
@@ -18,6 +18,12 @@ export default function CustomSelect({ options, onChange, className, optionsClas
       onChange(newValue);
     }
   };
+
+  useEffect(() => {
+    if (onChange && options.length > 0) {
+      onChange(options[0]?.value ?? '');
+    }
+  }, [options, onChange]);
 
   return (
     <select value={selectedValue} onChange={handleSelectChange} className={className} ref={ref}>

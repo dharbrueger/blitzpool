@@ -1,12 +1,15 @@
 import { Dialog } from "@headlessui/react";
 import CreatePoolForm from "../forms/CreatePoolForm";
+import { type PoolsWithRelations } from "~/pages";
 
 export default function CreatePoolModal({
   isOpen,
   onClose,
+  loadUserPools,
 }: {
   isOpen: boolean;
   onClose: () => void;
+  loadUserPools: (pools: PoolsWithRelations[]) => void;
 }) {
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
@@ -21,7 +24,7 @@ export default function CreatePoolModal({
           </Dialog.Description>
 
           <div className="mt-4">
-            <CreatePoolForm onClose={onClose}/>
+            <CreatePoolForm onClose={onClose} loadUserPools={loadUserPools} />
           </div>
         </Dialog.Panel>
       </div>
