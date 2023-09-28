@@ -1,9 +1,10 @@
 import { type Prisma } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import Link from "next/link";
 import { useState, useEffect, type ReactNode } from "react";
-import { Toaster } from "react-hot-toast";
 import CreatePoolModal from "~/components/modals/CreatePoolModal";
+import JoinPoolModal from "~/components/modals/JoinPoolModal";
 import { api } from "~/utils/api";
 
 interface HomeActionMenuProps {
@@ -37,6 +38,9 @@ const DashboardPools: React.FC<DashboardPoolsProps> = ({
 }) => {
   if (!pools || pools.length === 0) return null;
 
+  const privatePools = pools.filter((pool) => pool.private);
+  const publicPools = pools.filter((pool) => !pool.private);
+
   return (
     <div className="w-4/5 border-[#283441] p-[20px] text-left lg:mx-4">
       <h1 className="text-4xl font-light uppercase text-white">My Pools</h1>
@@ -44,14 +48,39 @@ const DashboardPools: React.FC<DashboardPoolsProps> = ({
         work in progress...
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
-        {pools.map((pool) => (
-          <DashboardPoolCard
-            key={pool.id}
-            pool={pool}
-            currentUserId={currentUserId}
-          />
-        ))}
+      <div className="flex w-full flex-col">
+        {publicPools.length > 0 && (
+          <div>
+            <h1 className="mb-4 text-3xl font-light uppercase text-white">
+              Public
+            </h1>
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
+              {publicPools.map((pool) => (
+                <DashboardPoolCard
+                  key={pool.id}
+                  pool={pool}
+                  currentUserId={currentUserId}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        {privatePools.length > 0 && (
+          <div>
+            <h1 className="mb-4 text-3xl font-light uppercase text-white">
+              Private
+            </h1>
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
+              {privatePools.map((pool) => (
+                <DashboardPoolCard
+                  key={pool.id}
+                  pool={pool}
+                  currentUserId={currentUserId}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -64,33 +93,42 @@ const DashboardPoolCard: React.FC<DashboardPoolCardProps> = ({
   const userIsCommissioner = pool.commissioner.id === currentUserId;
 
   return (
-    <div
-      className="items-left mb-6 inline-flex max-w-[450px] flex-grow flex-col rounded-[30px] bg-gradient-to-br from-[#1b232c] via-[#12171D] to-[#0D0D10] 
+    <Link
+      href={`/pools/${pool.id}`}
+      className="flex w-full items-start p-4"
+      passHref
+    >
+      <div
+        className="items-left mb-6 inline-flex max-w-[450px] flex-grow flex-col rounded-[30px] bg-gradient-to-br from-[#1b232c] via-[#12171D] to-[#0D0D10] 
                     p-6 font-light outline-none hover:outline-2 hover:outline-[#283441] sm:flex-row xl:max-w-full
     "
-    >
-      <div className="mr-4 flex flex-col-reverse items-start justify-center text-xl text-white sm:flex-col sm:items-center">
-        <div>
-          <i className="fa fa-user-group">
-            <span className="mx-2">{pool.members.length}</span>
-          </i>
-        </div>
-        {userIsCommissioner && (
-          <div className="flex flex-col sm:items-center">
-            <hr className="my-1 hidden h-1 w-10 bg-white sm:block" />
-            <div className="font-bold">C</div>
+      >
+        <div className="mr-4 flex flex-col-reverse items-start justify-center text-xl text-white sm:flex-col sm:items-center">
+          <div>
+            <i className="fa fa-user-group">
+              <span className="mx-2">{pool.members.length}</span>
+            </i>
           </div>
-        )}
-      </div>
-      <div className="flex-1">
-        <div className="mt-4 max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap text-2xl uppercase text-white sm:max-w-full">
-          {pool.name}
+          {userIsCommissioner && (
+            <div className="flex flex-col sm:items-center">
+              <hr className="my-1 hidden h-1 w-10 bg-white sm:block" />
+              <div className="font-bold">
+                {pool.private && <i className="fa fa-lock mr-2 font-light"></i>}{" "}
+                C
+              </div>
+            </div>
+          )}
         </div>
-        <div className="mb-6 text-xl font-light uppercase text-slate-500">
-          {pool.type.name}
+        <div className="flex-1">
+          <div className="mt-4 max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap text-2xl uppercase text-white sm:max-w-full">
+            {pool.name}
+          </div>
+          <div className="mb-6 text-xl font-light uppercase text-slate-500">
+            {pool.type.name}
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
@@ -140,6 +178,8 @@ const HomeActionMenuCard: React.FC<HomeActionMenuCardProps> = ({
 };
 export default function Home() {
   const [isCreatePoolModalOpen, setIsCreatePoolModalOpen] = useState(false);
+  const [isJoinPoolModalOpen, setIsJoinPoolModalOpen] = useState(false);
+
   const [userPools, setUserPools] = useState([] as PoolsWithRelations[]);
   const { data: sessionData } = useSession();
   const currentUserId = sessionData?.user.id ?? "";
@@ -156,7 +196,6 @@ export default function Home() {
     setUserPools(pools ?? []);
   }, [pools]);
 
-
   return (
     <>
       <Head>
@@ -168,30 +207,14 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-full flex-col items-center pb-6">
-        <Toaster
-          position="top-center"
-          reverseOrder={false}
-          gutter={24}
-          containerClassName=""
-          containerStyle={{}}
-          toastOptions={{
-            // Define default options
-            className: "",
-            duration: 2000,
-            style: {
-              background: "#363636",
-              color: "#fff",
-            },
-
-            // Default options for specific types
-            success: {
-              duration: 3000,
-            },
-          }}
-        />
         <CreatePoolModal
           isOpen={isCreatePoolModalOpen}
           onClose={() => setIsCreatePoolModalOpen(false)}
+          loadUserPools={loadUserPools}
+        />
+        <JoinPoolModal
+          isOpen={isJoinPoolModalOpen}
+          onClose={() => setIsJoinPoolModalOpen(false)}
           loadUserPools={loadUserPools}
         />
         <div className="flex w-full flex-col items-center gap-4">
@@ -205,6 +228,8 @@ export default function Home() {
             <HomeActionMenuCard
               actionName="Join A&nbsp;Pool"
               actionIcon="user-plus"
+              onClick={() => setIsJoinPoolModalOpen(true)}
+              enabled
             />
             <HomeActionMenuCard actionName="View Templates" actionIcon="file" />
           </HomeActionMenu>

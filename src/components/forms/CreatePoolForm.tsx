@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import * as Form from "@radix-ui/react-form";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { api } from "~/utils/api";

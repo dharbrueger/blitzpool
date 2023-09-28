@@ -12,6 +12,15 @@ const userPoolsInput = z.object({
   userId: z.string(),
 });
 
+const poolFindOneInput = z.object({
+  id: z.string(),
+});
+
+const joinPoolInput = z.object({
+  id: z.string(),
+  userId: z.string(),
+});
+
 export const poolsRouter = createTRPCRouter({
   create: publicProcedure
     .input(poolCreationInput)
@@ -107,6 +116,79 @@ export const poolsRouter = createTRPCRouter({
         return pools;
       } catch (error) {
         throw new Error("Failed to get pools");
+      }
+    }),
+  findOne: publicProcedure
+    .input(poolFindOneInput)
+    .query(async ({ ctx, input }) => {
+      try {
+        const pool = await ctx.prisma.pool.findUnique({
+          where: {
+            id: input.id,
+          },
+          include: {
+            commissioner: true,
+            type: true,
+            members: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        });
+
+        if (!pool) {
+          throw new Error("Pool not found");
+        }
+
+        return pool;
+      } catch (error) {
+        throw new Error("Failed to retrieve pool");
+      }
+    }),
+  joinPool: publicProcedure
+    .input(joinPoolInput)
+    .mutation(async ({ ctx, input }) => {
+      try {
+        // Assuming you've managed session and have user ID
+        const userId = input.userId;
+        const poolId = input.id;
+
+        // Check if user is already a member
+        const existingMembership = await ctx.prisma.membership.findFirst({
+          where: {
+            userId: userId,
+            poolId: poolId,
+          },
+        });
+
+        if (existingMembership) {
+          throw new Error("You are already a member of this pool");
+        }
+
+        await ctx.prisma.membership.create({
+          data: {
+            userId: userId,
+            poolId: poolId,
+          },
+        });
+
+        return await ctx.prisma.pool.findMany({
+          where: {
+            members: {
+              some: {
+                userId: input.userId,
+              },
+            },
+          },
+          include: {
+            commissioner: true,
+            type: true,
+            members: true,
+          },
+        });
+      } catch (error) {
+        throw new Error("Failed to retrieve pool");
       }
     }),
 });
