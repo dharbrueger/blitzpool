@@ -210,6 +210,7 @@ export default function Home() {
         <CreatePoolModal
           isOpen={isCreatePoolModalOpen}
           onClose={() => setIsCreatePoolModalOpen(false)}
+          openJoinPoolModal={() => setIsJoinPoolModalOpen(true)}
           loadUserPools={loadUserPools}
         />
         <JoinPoolModal
