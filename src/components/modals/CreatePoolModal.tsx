@@ -31,6 +31,7 @@ export default function CreatePoolModal({
             <div className="mt-5 text-white">
               Enter a pool name and select a pool type to get started.
               <br></br>
+              <br></br>
               If you&apos;re looking to join an already existing pool instead, click <span className="text-sky-600 cursor-pointer" onClick={handleJoinPool}>here</span> to do so.
             </div>
           </Dialog.Description>
