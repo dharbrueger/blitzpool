@@ -64,7 +64,7 @@ export default function PoolGrid({ onClose, loadUserPools }: PoolGridProps) {
               <th className="text-xl font-light uppercase text-slate-400">
                 NAME
               </th>
-              <th className="text-xl font-light uppercase text-slate-400">
+              <th className="text-xl font-light uppercase text-slate-400 hidden md:block">
                 Commissioner
               </th>
               <th className="text-xl font-light uppercase text-slate-400">
@@ -81,7 +81,7 @@ export default function PoolGrid({ onClose, loadUserPools }: PoolGridProps) {
                   className="w-full cursor-pointer bg-[#1b232c] pl-2 text-xl text-slate-200 hover:bg-[#0D0D10]"
                 >
                   <td className="py-4 pl-2 pr-6">{item.name}</td>
-                  <td className="">{item.commissioner.name}</td>
+                  <td className="hidden md:table-cell">{item.commissioner.name}</td>
                   <td className="">{item.members.length}</td>
                 </tr>
               );
