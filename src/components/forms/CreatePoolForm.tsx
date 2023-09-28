@@ -12,7 +12,10 @@ type CreatePoolFormProps = {
   loadUserPools: (pools: PoolsWithRelations[]) => void;
 };
 
-export default function CreatePoolForm({ onClose, loadUserPools }: CreatePoolFormProps) {
+export default function CreatePoolForm({
+  onClose,
+  loadUserPools,
+}: CreatePoolFormProps) {
   const [name, setName] = useState("");
   const [poolTypeId, setPoolTypeId] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
@@ -44,7 +47,9 @@ export default function CreatePoolForm({ onClose, loadUserPools }: CreatePoolFor
     },
   });
 
-  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleSubmit = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     event.preventDefault();
 
     if (!name) {
@@ -63,20 +68,20 @@ export default function CreatePoolForm({ onClose, loadUserPools }: CreatePoolFor
   return (
     <Form.Root className="grid w-[280px] md:w-[500px]">
       <Form.Field className="mb-9 grid" name="poolName">
-          <Form.Label className="mr-6 text-lg font-light uppercase leading-[35px] text-white">
-            pool name
-          </Form.Label>
-          <Form.Message
-            className="text-left text-[13px] text-red-500 opacity-[0.8]"
-            match="valueMissing"
-          >
-            Please enter a pool name
-          </Form.Message>
+        <Form.Label className="mr-6 text-lg font-light uppercase leading-[35px] text-white">
+          pool name
+        </Form.Label>
+        <Form.Message
+          className="text-left text-[13px] text-red-500 opacity-[0.8]"
+          match="valueMissing"
+        >
+          Please enter a pool name
+        </Form.Message>
         <Form.Control asChild>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="shadow-blackA9 selection:color-white border-b-2 border-solid border-slate-500 selection:bg-blackA9 box-border inline-flex h-[40px] appearance-none items-center justify-center bg-transparent text-lg outline-none"
+            className="box-border inline-flex h-[40px] items-center justify-center border-b-2 border-solid border-slate-500 bg-transparent text-lg outline-none"
             type="text"
             required
           />
@@ -88,7 +93,7 @@ export default function CreatePoolForm({ onClose, loadUserPools }: CreatePoolFor
             <div className="flex w-full">
               <div className="uppercase">pool type</div>
 
-              <div className="flex items-center justify-end flex-1 text-slate-400">
+              <div className="flex flex-1 items-center justify-end text-slate-400">
                 <Form.Label className="mr-[5px]">private?</Form.Label>
                 <input
                   type="checkbox"
@@ -108,20 +113,20 @@ export default function CreatePoolForm({ onClose, loadUserPools }: CreatePoolFor
         <Form.Control asChild>
           <PoolTypeSelector
             onChange={handlePoolTypeChange}
-            className="border-b-2 border-solid border-slate-500 box-border inline-flex h-[40px] items-center justify-center bg-transparent text-lg outline-none"
+            className="box-border inline-flex h-[40px] items-center justify-center border-b-2 border-solid border-slate-500 bg-transparent text-lg outline-none"
             optionsClassName="bg-black text-white"
           />
         </Form.Control>
       </Form.Field>
       <div className="mt-6 flex flex-col sm:flex-row">
         <button
-          onClick={e => handleSubmit(e)}
-          className="mr-6 inline-flex h-[35px] mb-4 w-full items-center justify-center rounded-[6px] bg-bp-primary p-6 font-light uppercase text-black hover:bg-[#ffef5eb7] sm:w-2/5"
+          onClick={(e) => handleSubmit(e)}
+          className="mb-4 mr-6 inline-flex h-[35px] w-full items-center justify-center rounded-[6px] bg-bp-primary p-6 font-light uppercase text-black hover:bg-[#ffef5eb7] sm:w-2/5"
         >
           Create
         </button>
         <button
-          className="inline-flex h-[35px] items-center justify-center rounded-[6px] bg-transparent border-2 border-b-2 border-solid px-4 py-6 font-light uppercase text-white hover:bg-[#2834418a] sm:w-2/5"
+          className="inline-flex h-[35px] items-center justify-center rounded-[6px] border-2 border-b-2 border-solid bg-transparent px-4 py-6 font-light uppercase text-white hover:bg-[#2834418a] sm:w-2/5"
           onClick={onClose}
         >
           Cancel
