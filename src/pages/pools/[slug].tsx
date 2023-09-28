@@ -28,7 +28,7 @@ export default function Pools() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-full flex-col items-center pb-6">
-        <div className="w-3/5 rounded-[50px] border-2 border-[#283441] bg-[#12171D] text-center pt-[40px]  p-[40px] xl:p-[60px] xl:text-left lg:mx-4">
+        <div className="w-fit sm:w-3/5 rounded-[50px] border-2 border-[#283441] bg-[#12171D] text-center pt-[40px]  p-[40px] xl:p-[60px] xl:text-left lg:mx-4">
           <div className="text-4xl font-light uppercase text-white">
             <div>
               {pool?.name ?? "No Pool Name"}
