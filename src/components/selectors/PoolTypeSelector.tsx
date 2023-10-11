@@ -23,6 +23,7 @@ const PoolTypeSelector = React.forwardRef<HTMLSelectElement, PoolTypeSelectorPro
   return (
     <CustomSelect
       options={options ?? []}
+      defaultOption={options ? options[0] : undefined}
       onChange={props.onChange}
       className={props.className}
       optionsClassName={props.optionsClassName}
