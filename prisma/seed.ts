@@ -180,9 +180,7 @@ const seedCompetitions = async () => {
         const numberOfWeeks = periodEntries.length;
   
         for (let weekNumber = 1; weekNumber <= numberOfWeeks; weekNumber++) {
-          process.stdout.cursorTo(1);
-          process.stdout.write(`Seeding ${year} week ${weekNumber}...`);
-
+          console.log(`Seeding year: ${year} week: ${weekNumber}`);
           const data = await getFootballDataWithQuery(
             year.toString(),
             weekNumber.toString(),
@@ -290,8 +288,6 @@ const seedCompetitions = async () => {
     }
   } catch (error) {
     console.error("Error seeding competitions:", error);
-  } finally {
-    process.stdout.clearLine(0);
   }
 };
 
