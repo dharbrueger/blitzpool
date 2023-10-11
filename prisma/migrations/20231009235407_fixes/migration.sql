@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Competition" ALTER COLUMN "year" SET DATA TYPE TEXT,
+ALTER COLUMN "week" SET DATA TYPE TEXT;
+
+-- AlterTable
+ALTER TABLE "Competitor" ALTER COLUMN "score" SET DATA TYPE TEXT;

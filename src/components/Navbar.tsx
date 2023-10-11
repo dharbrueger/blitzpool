@@ -1,6 +1,6 @@
 import { useViewport } from "../hooks/useViewport";
 import HamburgerMenu from "./HamburgerMenu";
-import type { NavLink } from "../shared/lib/types";
+import type { NavLink } from "../types/navigation";
 import DesktopMenu from "./DesktopMenu";
 import { signOut } from "next-auth/react";
 

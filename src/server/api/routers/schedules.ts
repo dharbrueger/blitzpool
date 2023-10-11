@@ -1,162 +1,153 @@
 import { z } from "zod";
-import {
-  createTRPCRouter,
-  publicProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import type { ESPN_Data, ESPN_Defaults } from "~/types/espn";
 
-export interface Game {
-  competitions: Competition[];
-  uid: string;
-  date: string;
-  week: {
-    number: number;
-  };
-  name: string;
-  season: object;
-  links: object[];
+export type GameForDisplay = {
   id: string;
-  shortName: string;
-  status: {
-    period: number;
-    displayClock: string;
-    clock: number;
-    type: {
-      name: string;
-      description: string;
-      id: string;
-      state: string;
-      completed: boolean;
-      detail: string;
-      shortDetail: string;
-    };
-  };
-}
-
-interface Competition {
   date: string;
-  attendance: number;
-  broadcasts: Broadcast[];
-  competitors: Competitor[];
-  conferenceCompetition: boolean;
-  format: {
-    regulation: {
-      periods: number;
-    };
+  status: string;
+  stadium: string;
+  homeTeamName: string;
+  homeTeamLocation: string;
+  awayTeamName: string;
+  awayTeamLocation: string;
+  homeTeamScore: number;
+  awayTeamScore: number;
+};
+
+export type GamesForDisplayGroupedByWeek = {
+  [key: string]: GameForDisplay[];
+};
+
+export type ScheduleForDisplay = {
+  week: string;
+  year: string;
+  groupedGames: GamesForDisplayGroupedByWeek;
+};
+
+function getDayOfWeekName(dayOfWeek: number) {
+  const dayNames = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  return dayNames[dayOfWeek];
+}
+
+type GroupGamesByDayProps = {
+  games: GameForDisplay[];
+}
+
+const groupGamesByDay = ({ games }: GroupGamesByDayProps) => {
+  if (games.length === 0) return {} as GamesForDisplayGroupedByWeek;
+
+  const groupedGames: GamesForDisplayGroupedByWeek = {
+    Thursday: [],
+    Sunday: [],
+    Monday: [],
+    Tuesday: [],
+    Wednesday: [],
+    Friday: [],
+    Saturday: [],
   };
-  id: string;
-  neutralSite: boolean;
-  odds: Odd[];
-  playByPlayAvailable: boolean;
-  recent: boolean;
-  startDate: string;
-  status: {
-    period: number;
-    displayClock: string;
-    clock: number;
-  };
-  tickets: Ticket[];
-  timeValid: boolean;
-  type: {
-    id: string;
-    abbreviation: string;
-  };
-  uid: string;
-  venue: Venue;
-}
 
-interface Broadcast {
-  market: string;
-  names: string[];
-}
+  games.forEach((game) => {
+    const numericDayOfWeek = new Date(game.date).getDay();
+    const dayOfWeekName = getDayOfWeekName(numericDayOfWeek);
 
-interface Competitor {
-  uid: string;
-  homeAway: string;
-  score: string;
-  // Add more properties as needed
-}
+    groupedGames[dayOfWeekName ?? "Unknown"]?.push(game);
+  });
 
-interface Odd {
-  overUnder: number;
-  provider: {
-    name: string;
-    id: string;
-    priority: number;
-  };
-  // Add more properties as needed
-}
-
-interface Ticket {
-  summary: string;
-  numberAvailable: number;
-  // links: TicketLink[];
-}
-
-// interface TicketLink {
-//   // Define the properties of a ticket link if necessary
-// }
-
-interface Venue {
-  address: {
-    city: string;
-    state: string;
-  };
-  fullName: string;
-  // Add more properties as needed
-}
-
-interface Data {
-  content: {
-    schedule: {
-      [key: string]: {
-        games: Game[];
-      };
-    };
-  };
-}
-
-interface Schedule {
-  [key: string]: {
-    games: Game[];
-  };
-}
+  return groupedGames;
+};
 
 export const schedulesRouter = createTRPCRouter({
-  getData: publicProcedure
+  getCurrentWeekAndYear: publicProcedure.query(async () => {
+    try {
+      const ESPN_SCHEDULE_URL = process.env.ESPN_SCHEDULE_URL;
+
+      if (!ESPN_SCHEDULE_URL) return;
+
+      const res = await fetch(`${ESPN_SCHEDULE_URL}?xhr=1`);
+      if (!res.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const data: ESPN_Data = (await res.json()) as ESPN_Data;
+      const defaultData: ESPN_Defaults = data.content.defaults ?? {} as ESPN_Defaults;
+
+      return defaultData;
+    } catch (error) {
+      throw new Error("Failed to fetch data");
+    }
+  }),
+  getScheduleForDisplay: publicProcedure
     .input(
       z.object({
         year: z.string(),
         week: z.string(),
       })
     )
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       const { year, week } = input;
       try {
-        const ESPN_SCHEDULE_URL = process.env.ESPN_SCHEDULE_URL;
-
-        if (!ESPN_SCHEDULE_URL) return;
-
-        const res = await fetch(
-          `${ESPN_SCHEDULE_URL}?xhr=1&year=${year}&week=${week}`
-        );
-        if (!res.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const data: Data = await res.json() as Data;
-        const schedule: Schedule = data.content?.schedule || {};
-
-        const games: Game[] = [];
-        for (const key in schedule) {
-          if (schedule[key]?.games) {
-            games.push(...(schedule[key]?.games || []));
-          }
-        }
+        const games = await ctx.prisma.competition.findMany({
+          where: {
+            year: {
+              equals: year,
+            },
+            week: {
+              equals: week,
+            },
+          },
+          include: {
+            competitors: true,
+            competitionStatus: true,
+          },
+        });
 
         if (games.length > 0) {
-          return games;
+          const gamesForDisplay: GameForDisplay[] = games.map((game) => {
+            const { id, date, stadium, competitionStatus, competitors } = game;
+            const homeTeam = competitors.find((c) => c.homeAway === "home");
+            const awayTeam = competitors.find((c) => c.homeAway === "away");
+
+            const homeTeamScore = homeTeam?.score ?? 0;
+            const awayTeamScore = awayTeam?.score ?? 0;
+
+            const homeTeamLocation = homeTeam?.location ?? "Unknown";
+            const awayTeamLocation = awayTeam?.location ?? "Unknown";
+
+            const homeTeamName = homeTeam?.name ?? "Unknown";
+            const awayTeamName = awayTeam?.name ?? "Unknown";
+
+            return {
+              id,
+              date,
+              status: competitionStatus.name,
+              stadium,
+              homeTeamName,
+              awayTeamName,
+              homeTeamLocation,
+              awayTeamLocation,
+              homeTeamScore,
+              awayTeamScore,
+            } as GameForDisplay;
+          });
+
+          const groupedGames = groupGamesByDay({ games: gamesForDisplay });
+
+          return {
+            year,
+            week,
+            groupedGames,
+          } as ScheduleForDisplay;
         }
 
-        return undefined;
+        return {} as ScheduleForDisplay;
       } catch (error) {
         throw new Error("Failed to fetch data");
       }

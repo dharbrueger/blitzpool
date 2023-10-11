@@ -1,4 +1,4 @@
-import type { NavLink } from "~/shared/lib/types";
+import type { NavLink } from "~/types/navigation";
 
 interface NavLinkRendererProps {
   links: NavLink[];

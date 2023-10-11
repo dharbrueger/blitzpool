@@ -1,8 +1,9 @@
 import { type Prisma } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import router from "next/router";
 import { type Dispatch, type SetStateAction, useState, useRef } from "react";
+import toast from "react-hot-toast";
 import { api } from "~/utils/api";
 
 export type PoolWithRelations = Prisma.PoolGetPayload<{
@@ -37,15 +38,19 @@ const PoolHeader = ({ pool, setActiveTab, activeTab }: PoolHeaderProps) => {
   const picksRef = useRef<HTMLDivElement>(null);
   const membersRef = useRef<HTMLDivElement>(null);
   const settingsRef = useRef<HTMLDivElement>(null);
+  const { data: sessionData } = useSession();
 
   if (!pool) return null;
+
+  const currentUserId = sessionData?.user.id ?? "";
+  const currentUserIsCommissioner = pool.commissioner.id === currentUserId;
 
   const handleSetActiveTab = (e: React.MouseEvent<HTMLDivElement>) => {
     setActiveTab(e.currentTarget.id);
   };
 
   return (
-    <div className="w-4/5 rounded-[50px] border-2 border-[#283441] bg-[#12171D] p-[40px] text-left sm:w-3/5 lg:mx-4 xl:p-[60px]">
+    <div className="mb-4 max-w-fit rounded-[50px] border-2 border-[#283441] bg-[#12171D] p-[40px] text-left">
       {/* Begin PoolHeader header information */}
       <div className="mb-6 text-4xl font-light uppercase text-white">
         <div>
@@ -55,13 +60,13 @@ const PoolHeader = ({ pool, setActiveTab, activeTab }: PoolHeaderProps) => {
       </div>
 
       {/* Begin PoolHeaderControls */}
-      <div className="flex w-full cursor-pointer flex-col text-xl select-none uppercase text-slate-300 md:w-fit md:flex-row">
+      <div className="flex w-full cursor-pointer select-none flex-col text-xl uppercase text-slate-300 md:w-fit md:flex-row">
         <div
           id="picks"
           ref={picksRef}
           className={`border-b-4 border-slate-300 p-4 hover:bg-slate-500 ${
             activeTab === "picks" ? "bg-slate-500" : "bg-slate-700"
-          } md:rounded-l-3xl md:border-b-0 md:border-r-4`}
+          } rounded-t-3xl md:rounded-l-3xl md:rounded-t-none md:rounded-tl-3xl md:border-b-0 md:border-r-4`}
           onClick={(e) => handleSetActiveTab(e)}
         >
           <i className="fa fa-check-square mr-4 text-bp-primary" />
@@ -81,10 +86,13 @@ const PoolHeader = ({ pool, setActiveTab, activeTab }: PoolHeaderProps) => {
         <div
           id="settings"
           ref={settingsRef}
-          className={`p-4 hover:bg-slate-500 ${
+          className={`p-4 ${
             activeTab === "settings" ? "bg-slate-500" : "bg-slate-700"
-          } md:rounded-r-3xl`}
-          onClick={(e) => handleSetActiveTab(e)}
+          } ${
+            currentUserIsCommissioner ? "hover:bg-slate-500" : "cursor-not-allowed bg-slate-500 grayscale"
+          } rounded-b-3xl md:rounded-b-none md:rounded-r-3xl md:rounded-br-3xl`}
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          onClick={currentUserIsCommissioner ? (e) => handleSetActiveTab(e) : () => {}}
         >
           <i className="fa fa-cog mr-4 text-bp-primary" />
           <span className="">settings</span>
@@ -98,13 +106,15 @@ const PoolMembersView = ({ pool }: PoolMembersViewProps) => {
   if (!pool) return null;
 
   return (
-    <div className="mt-4 w-4/5 rounded-[50px] border-2 border-[#283441] bg-[#12171D] p-[40px] pt-[40px] text-left sm:w-3/5 lg:mx-4 xl:p-[60px] xl:text-left">
+    <div className="w-fit rounded-[50px] border-2 border-[#283441] bg-[#12171D] p-[40px] text-left">
       <div className="text-4xl font-light uppercase text-slate-300">
-        <div className="mb-4">
-          <span className="mr-4">Members</span>
+        <div className="mb-4 flex flex-col sm:flex-row">
+          <span className="mb-2 sm:mr-4">Members</span>
           <div className="text-white">
-            <i className="fa fa-user-group" />
-            &nbsp;<span>{pool?.members.length}</span>
+            <div>
+              <i className="fa fa-user-group" />
+              <span className="ml-2">{pool?.members.length}</span>
+            </div>
           </div>
         </div>
         <div>
@@ -125,11 +135,13 @@ const PoolMembersView = ({ pool }: PoolMembersViewProps) => {
 };
 
 const PoolPicksView = ({ pool }: PoolPicksViewProps) => {
+  const { data } = api.schedules.getCurrentWeekAndYear.useQuery();
+
   return (
-    <div className="mt-4 w-4/5 rounded-[50px] border-2 border-[#283441] bg-[#12171D] p-[40px] pt-[40px] text-left sm:w-3/5 lg:mx-4 xl:p-[60px] xl:text-left">
+    <div className="max-w-fit rounded-[50px] border-2 border-[#283441] bg-[#12171D] p-[40px] text-left">
       <div className="text-4xl font-light uppercase text-slate-300">
         <div className="mb-4">
-          <span className="mr-4">Picks</span>
+          <div className="flex items-center">{data?.year} Week {data?.week} Picks</div>
         </div>
       </div>
     </div>
@@ -137,11 +149,34 @@ const PoolPicksView = ({ pool }: PoolPicksViewProps) => {
 };
 
 const PoolSettingsView = ({ pool }: PoolSettingsViewProps) => {
+  const { mutate } = api.pools.deletePool.useMutation({
+    onSuccess: async (data) => {
+      toast.success("Pool deleted successfully!");
+      await router.push("/");
+    },
+    onError: (e) => {
+      const errorMessage = e.data?.zodError?.fieldErrors.content;
+      if (errorMessage && errorMessage[0]) {
+        toast.error(errorMessage[0]);
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+    },
+  });
+
   return (
-    <div className="mt-4 w-4/5 rounded-[50px] border-2 border-[#283441] bg-[#12171D] p-[40px] pt-[40px] text-left sm:w-3/5 lg:mx-4 xl:p-[60px] xl:text-left">
+    <div className="rounded-[50px] border-2 border-[#283441] bg-[#12171D] p-[40px] text-center">
       <div className="text-4xl font-light uppercase text-slate-300">
         <div className="mb-4">
-          <span className="mr-4">Settings</span>
+          <span>Settings</span>
+        </div>
+        <div>
+          <button
+            className="rounded-3xl bg-red-600 p-3 px-6 text-xl"
+            onClick={() => mutate({ id: pool.id })}
+          >
+            Delete Pool
+          </button>
         </div>
       </div>
     </div>
@@ -149,7 +184,6 @@ const PoolSettingsView = ({ pool }: PoolSettingsViewProps) => {
 };
 
 export default function Pools() {
-  const router = useRouter();
   const { slug } = router.query;
 
   const pool = api.pools.findOne.useQuery({ id: slug as string })

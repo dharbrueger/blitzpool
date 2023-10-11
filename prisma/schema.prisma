@@ -61,7 +61,7 @@ model VerificationToken {
 }
 
 model Team {
-  id               String  @id @default(cuid())
+  id               String       @id @default(cuid())
   slug             String
   location         String
   name             String
@@ -72,6 +72,7 @@ model Team {
   color            String
   alternateColor   String
   isActive         Boolean
+  competitors      Competitor[]
 }
 
 model Pool {
@@ -101,4 +102,43 @@ model Membership {
   poolId    String
   user      User     @relation(fields: [userId], references: [id])
   pool      Pool     @relation(fields: [poolId], references: [id])
+}
+
+model SeasonType {
+  id           Int           @id @default(autoincrement())
+  name         String        @unique
+  Competitions Competition[]
+}
+
+model Competitor {
+  id            String      @id @default(cuid())
+  homeAway      String
+  score         String
+  winner        String
+  teamId        String
+  team          Team        @relation(fields: [teamId], references: [id])
+  name          String
+  location      String
+  competitionId String
+  competition   Competition @relation(fields: [competitionId], references: [id])
+  // linescores
+}
+
+model CompetitionStatus {
+  id           Int           @id @default(autoincrement())
+  name         String        @unique
+  Competitions Competition[]
+}
+
+model Competition {
+  id                  String            @id @default(cuid())
+  date                String            
+  year                String
+  week                String
+  stadium             String
+  competitors         Competitor[]
+  competitionStatusId Int
+  competitionStatus   CompetitionStatus @relation(fields: [competitionStatusId], references: [id])
+  seasonTypeId        Int
+  seasonType          SeasonType        @relation(fields: [seasonTypeId], references: [id])
 }

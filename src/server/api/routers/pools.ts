@@ -191,4 +191,33 @@ export const poolsRouter = createTRPCRouter({
         throw new Error("Failed to retrieve pool");
       }
     }),
+    deletePool: publicProcedure
+    .input(poolFindOneInput)
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const pool = await ctx.prisma.pool.findUnique({
+          where: {
+            id: input.id,
+          },
+        });
+
+        if (!pool) {
+          throw new Error("Pool not found");
+        }
+
+        await ctx.prisma.membership.deleteMany({
+          where: {
+            poolId: input.id,
+          },
+        });
+
+        await ctx.prisma.pool.delete({
+          where: {
+            id: pool.id,
+          },
+        });
+      } catch (error) {
+        throw new Error("Failed to retrieve pool");
+      }
+    }),
 });

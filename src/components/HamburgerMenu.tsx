@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import type { NavLink } from "~/shared/lib/types";
+import type { NavLink } from "~/types/navigation";
 import NavLinkRenderer from "./NavLinkRenderer";
 import LogoImage from "public/logo.png";
 import Image from "next/image";

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import UserIconMenu from "./UserIconMenu";
-import type { NavLink } from "../shared/lib/types";
+import type { NavLink } from "../types/navigation";
 import NavLinkRenderer from "./NavLinkRenderer";
 
 interface DesktopMenuProps {
