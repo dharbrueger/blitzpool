@@ -307,7 +307,7 @@ async function main() {
   await seedTeams().then(() => console.log("Teams seeded."));
   await seedPoolTypes().then(() => console.log("Pool types seeded."));
   await seedSeasonTypes().then(() => console.log("Season types seeded."));
-  await seedCompetitions().then(() => console.log("Competitions seeded."));
+  // await seedCompetitions().then(() => console.log("Competitions seeded."));
 }
 
 main()
