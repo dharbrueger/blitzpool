@@ -292,8 +292,8 @@ const seedCompetitions = async () => {
 };
 
 const deleteData = async () => {
-  await prisma.competitor.deleteMany({});
-  await prisma.competition.deleteMany({});
+  // await prisma.competitor.deleteMany({});
+  // await prisma.competition.deleteMany({});
   await prisma.competitionStatus.deleteMany({});
   await prisma.seasonType.deleteMany({});
   await prisma.poolType.deleteMany({});
