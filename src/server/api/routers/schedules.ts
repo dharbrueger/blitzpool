@@ -56,7 +56,7 @@ const groupGamesByDay = ({ games }: GroupGamesByDayProps) => {
   };
 
   games.forEach((game) => {
-    const numericDayOfWeek = new Date(game.date).getUTCDay();
+    const numericDayOfWeek = new Date(game.date).getDate();
     const dayOfWeekName = getDayOfWeekName(numericDayOfWeek);
 
     groupedGames[dayOfWeekName ?? "Unknown"]?.push(game);
