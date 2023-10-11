@@ -80,29 +80,29 @@ const ScheduleSelectGroup = ({
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-start text-5xl gap-4 xl:gap-0 xl:7xl">
-      <div className="flex max-w-fit items-center mr-4">
-        <div className="text-slate-400">
+    <div className="flex flex-col sm:flex-row items-start text-5xl gap-4 xl:gap-0">
+      <div className="flex max-w-fit items-center mr-8">
+        <div className="text-slate-200 mr-4">
           Year: 
         </div>
         <CustomSelect
           options={yearOptions.sort((a, b) => parseInt(b.value) - parseInt(a.value))}
           defaultOption={defaultYearOption}
           onChange={setYear}
-          className="box-border inline-flex items-center justify-center bg-transparent outline-none"
+          className="box-border bg-[#12171D] border-2 border-[#283441] rounded-2xl px-2 py-2 inline-flex items-center justify-center outline-none"
           optionsClassName="bg-[#12171D] text-slate-200 overflow-hidden"
         />
       </div>
 
       <div className="flex max-w-fit items-center">
-        <div className="text-slate-400">
+        <div className="text-slate-200 mr-4">
           Week: 
         </div>
         <CustomSelect
           options={weekOptions.sort((a, b) => parseInt(a.value) - parseInt(b.value))}
           defaultOption={defaultWeekOption}
           onChange={setWeek}
-          className="box-border inline-flex items-center justify-center bg-transparent outline-none"
+          className="box-border bg-[#12171D] border-2 border-[#283441] rounded-2xl px-2 py-2 inline-flex items-center justify-center outline-none"
           optionsClassName="bg-[#12171D] text-slate-200"
         />
       </div>
