@@ -7,6 +7,7 @@ import {
   type ESPN_Schedule,
   type ESPN_Game,
 } from "../src/types/espn";
+import moment from "moment";
 const prisma = new PrismaClient();
 
 type ESPN_TEAMS_RESPONSE = {
@@ -122,7 +123,7 @@ const seedCompetitionStatuses = async () => {
         { id: 3, name: "final" },
         // { id: 4, name: "delayed" },
         { id: 5, name: "canceled" },
-        { id: 6, name: "postponed"},
+        { id: 6, name: "postponed" },
       ],
     });
   } catch (error) {
@@ -158,27 +159,27 @@ const seedSeasonTypes = async () => {
 };
 
 const seedCompetitions = async () => {
-  const startYear = 2002;
+  const startYear = 2023;
   const endYear = new Date().getFullYear();
 
   try {
     for (let year = startYear; year <= endYear; year++) {
       const calendar = await getCalendarByYear(year.toString());
       if (!calendar) continue;
-  
+
       const periods = calendar.length - 1;
-  
+
       for (let index = 0; index <= periods; index++) {
         const period = calendar[index] as ESPN_CalendarPeriod | undefined;
         if (!period) continue;
-  
+
         const seasonType = period?.value ?? "1";
         const periodEntries = period?.entries;
-  
+
         if (!periodEntries || seasonType !== "2") continue;
-  
+
         const numberOfWeeks = periodEntries.length;
-  
+
         for (let weekNumber = 1; weekNumber <= numberOfWeeks; weekNumber++) {
           console.log(`Seeding year: ${year} week: ${weekNumber}`);
           const data = await getFootballDataWithQuery(
@@ -187,100 +188,97 @@ const seedCompetitions = async () => {
             seasonType
           );
           if (!data) continue;
-  
+
           const schedule: ESPN_Schedule = data.content?.schedule || {};
-  
-          const games: ESPN_Game[] = [];
+
           for (const key in schedule) {
-            if (schedule[key]?.games) {
-              games.push(...(schedule[key]?.games || []));
-            }
-          }
-  
-          for (const game of games) {
             let competition;
-  
-            try {
-              competition = await prisma.competition.create({
-                data: {
-                  date: game.date,
-                  year: year.toString(),
-                  week: weekNumber.toString(),
-                  stadium: game?.competitions[0]?.venue?.fullName ?? "",
-                  competitionStatus: {
-                    connect: {
-                      id: +(game?.competitions[0]?.status?.type?.id ?? "2"), //eek again lol
+
+            const games = schedule[key]?.games ?? [];
+
+            for (const game of games) {
+              try {
+                competition = await prisma.competition.create({
+                  data: {
+                    date: moment(key).utc().format(),
+                    year: year.toString(),
+                    week: weekNumber.toString(),
+                    stadium: game?.competitions[0]?.venue?.fullName ?? "",
+                    competitionStatus: {
+                      connect: {
+                        id: +(game?.competitions[0]?.status?.type?.id ?? "2"), //eek again lol
+                      },
+                    },
+                    seasonType: {
+                      connect: {
+                        id: +seasonType,
+                      },
                     },
                   },
-                  seasonType: {
-                    connect: {
-                      id: +seasonType,
+                });
+              } catch (e) {
+                const errorMessage = e as PrismaClientKnownRequestError;
+                const errorString = `Year: ${year} Week: ${weekNumber} Season Type: ${seasonType}. Error seeding competition: ${errorMessage.message}.`;
+                console.error(errorString);
+                continue;
+              }
+
+              const competitorOne = game.competitions[0]?.competitors[0];
+              const competitorTwo = game.competitions[0]?.competitors[1];
+
+              try {
+                await prisma.competitor.create({
+                  data: {
+                    homeAway: competitorOne?.homeAway ?? "",
+                    score: competitorOne?.score ?? "0",
+                    winner: competitorOne?.winner?.toString() ?? "false",
+                    team: {
+                      connect: {
+                        id: competitorOne?.id ?? "",
+                      },
+                    },
+                    name: competitorOne?.team?.name ?? "",
+                    location: competitorOne?.team?.location ?? "",
+                    competition: {
+                      connect: {
+                        id: competition.id,
+                      },
                     },
                   },
-                },
-              });
-            } catch (e) {
-              const errorMessage = e as PrismaClientKnownRequestError;
-              const errorString = `Year: ${year} Week: ${weekNumber} Season Type: ${seasonType}. Error seeding competition: ${errorMessage.message}.`;
-              console.error(errorString);
-              continue;
-            }
-  
-            const competitorOne = game.competitions[0]?.competitors[0];
-            const competitorTwo = game.competitions[0]?.competitors[1];
-  
-            try {
-              await prisma.competitor.create({
-                data: {
-                  homeAway: competitorOne?.homeAway ?? "",
-                  score: competitorOne?.score ?? "0",
-                  winner: competitorOne?.winner?.toString() ?? "false",
-                  team: {
-                    connect: {
-                      id: competitorOne?.id ?? "",
+                });
+              } catch (e) {
+                const errorMessage = e as PrismaClientKnownRequestError;
+                const errorString = `Year: ${year} Week: ${weekNumber} Season Type: ${seasonType}. Error seeding competitor for competition ${competition.id}: ${errorMessage.message}.`;
+                console.error(errorString);
+                continue;
+              }
+
+              try {
+                await prisma.competitor.create({
+                  data: {
+                    homeAway: competitorTwo?.homeAway ?? "",
+                    score: competitorTwo?.score ?? "0",
+                    winner: competitorTwo?.winner?.toString() ?? "false",
+                    team: {
+                      connect: {
+                        id: competitorTwo?.id ?? "",
+                      },
+                    },
+                    name: competitorTwo?.team?.name ?? "",
+                    location: competitorTwo?.team?.location ?? "",
+                    competition: {
+                      connect: {
+                        id: competition.id,
+                      },
                     },
                   },
-                  name: competitorOne?.team?.name ?? "",
-                  location: competitorOne?.team?.location ?? "",
-                  competition: {
-                    connect: {
-                      id: competition.id,
-                    },
-                  },
-                },
-              });
-            } catch (e) {
-              const errorMessage = e as PrismaClientKnownRequestError;
-              const errorString = `Year: ${year} Week: ${weekNumber} Season Type: ${seasonType}. Error seeding competitor for competition ${competition.id}: ${errorMessage.message}.`;
-              console.error(errorString);
-              continue;
-            }
-  
-            try {
-              await prisma.competitor.create({
-                data: {
-                  homeAway: competitorTwo?.homeAway ?? "",
-                  score: competitorTwo?.score ?? "0",
-                  winner: competitorTwo?.winner?.toString() ?? "false",
-                  team: {
-                    connect: {
-                      id: competitorTwo?.id ?? "",
-                    },
-                  },
-                  name: competitorTwo?.team?.name ?? "",
-                  location: competitorTwo?.team?.location ?? "",
-                  competition: {
-                    connect: {
-                      id: competition.id,
-                    },
-                  },
-                },
-              });
-            } catch (e) {
-              const errorMessage = e as PrismaClientKnownRequestError;
-              const errorString = `Year: ${year} Week: ${weekNumber} Season Type: ${seasonType}. Error seeding competitor for competition ${competition.id}: ${errorMessage.message}.`;
-              console.error(errorString);
-              continue;
+                });
+              } catch (e) {
+                const errorMessage = e as PrismaClientKnownRequestError;
+                const errorString = `Year: ${year} Week: ${weekNumber} Season Type: ${seasonType}. Error seeding competitor for competition ${competition.id}: ${errorMessage.message}.`;
+                console.error(errorString);
+                continue;
+              }
             }
           }
         }
@@ -296,14 +294,15 @@ const deleteData = async () => {
   // await prisma.competition.deleteMany({});
   await prisma.competitionStatus.deleteMany({});
   await prisma.seasonType.deleteMany({});
-  await prisma.poolType.deleteMany({});
   await prisma.team.deleteMany({});
 };
 
 async function main() {
   await deleteData().then(() => console.log("Data deleted."));
 
-  await seedCompetitionStatuses().then(() => console.log("Competition statuses seeded."));
+  await seedCompetitionStatuses().then(() =>
+    console.log("Competition statuses seeded.")
+  );
   await seedTeams().then(() => console.log("Teams seeded."));
   await seedPoolTypes().then(() => console.log("Pool types seeded."));
   await seedSeasonTypes().then(() => console.log("Season types seeded."));
