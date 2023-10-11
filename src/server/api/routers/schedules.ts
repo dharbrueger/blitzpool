@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import type { ESPN_Data, ESPN_Defaults } from "~/types/espn";
+import moment from "moment";
 
 export type GameForDisplay = {
   id: string;
@@ -56,7 +57,7 @@ const groupGamesByDay = ({ games }: GroupGamesByDayProps) => {
   };
 
   games.forEach((game) => {
-    const numericDayOfWeek = new Date(game.date).getDay();
+    const numericDayOfWeek = moment(game.date).day();
     const dayOfWeekName = getDayOfWeekName(numericDayOfWeek);
 
     groupedGames[dayOfWeekName ?? "Unknown"]?.push(game);
