@@ -28,6 +28,7 @@ type PoolMembersViewProps = {
 
 type PoolPicksViewProps = {
   pool: PoolWithRelations;
+  member: Prisma.MembershipGetPayload<{ include: { user: true } }> | undefined;
 };
 
 type PoolSettingsViewProps = {
@@ -89,10 +90,14 @@ const PoolHeader = ({ pool, setActiveTab, activeTab }: PoolHeaderProps) => {
           className={`p-4 ${
             activeTab === "settings" ? "bg-slate-500" : "bg-slate-700"
           } ${
-            currentUserIsCommissioner ? "hover:bg-slate-500" : "cursor-not-allowed bg-slate-500 grayscale"
+            currentUserIsCommissioner
+              ? "hover:bg-slate-500"
+              : "cursor-not-allowed bg-slate-500 grayscale"
           } rounded-b-3xl md:rounded-b-none md:rounded-r-3xl md:rounded-br-3xl`}
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          onClick={currentUserIsCommissioner ? (e) => handleSetActiveTab(e) : () => {}}
+          onClick={
+            currentUserIsCommissioner ? (e) => handleSetActiveTab(e) : () => null
+          }
         >
           <i className="fa fa-cog mr-4 text-bp-primary" />
           <span className="">settings</span>
@@ -106,7 +111,7 @@ const PoolMembersView = ({ pool }: PoolMembersViewProps) => {
   if (!pool) return null;
 
   return (
-    <div className="w-fit rounded-[50px] border-2 border-[#283441] bg-[#12171D] p-[40px] text-left">
+    <div className="rounded-[50px] border-2 border-[#283441] bg-[#12171D] p-[40px] text-left">
       <div className="text-4xl font-light uppercase text-slate-300">
         <div className="mb-4 flex flex-col sm:flex-row">
           <span className="mb-2 sm:mr-4">Members</span>
@@ -134,14 +139,77 @@ const PoolMembersView = ({ pool }: PoolMembersViewProps) => {
   );
 };
 
-const PoolPicksView = ({ pool }: PoolPicksViewProps) => {
+const PoolPicksView = ({ pool, member }: PoolPicksViewProps) => {
+  if (!pool || !member) return null;
+
   const { data } = api.schedules.getCurrentWeekAndYear.useQuery();
+  const { data: picks } =
+    api.picks.getAllPicksForPoolMemberByYearAndWeek.useQuery({
+      membershipId: member.id,
+      poolId: pool.id,
+      year: data?.year.toString() ?? "",
+      week: data?.week.toString() ?? "",
+    });
+
+  const { data: games } = api.competitions.getGamesByWeekAndYear.useQuery({
+    week: data?.week.toString() ?? "",
+    year: data?.year.toString() ?? "",
+  });
 
   return (
-    <div className="max-w-fit rounded-[50px] border-2 border-[#283441] bg-[#12171D] p-[40px] text-left">
-      <div className="text-4xl font-light uppercase text-slate-300">
-        <div className="mb-4">
-          <div className="flex items-center">{data?.year} Week {data?.week} Picks</div>
+    <div className="rounded-[50px] border-2 border-[#283441] bg-[#12171D] p-2 sm:p-[40px]">
+      <div className="w-full text-3xl font-light uppercase text-slate-300 md:text-5xl">
+        <div className="my-4 flex flex-col items-center">
+          <div className="mb-8 w-full">
+            {data?.year} Week {data?.week} Picks
+          </div>
+          <div className="w-full">
+            {picks?.length === 0 ? (
+              <table className="w-full">
+                <thead>
+                  <tr className="text-xl">
+                    <th className="text-left text-white">Away Team</th>
+                    <th className="text-center text-white">Deadline</th>
+                    <th className="text-right text-white">Home Team</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {games?.map((game) => (
+                    <tr key={game.id}>
+                      <td className="text-left text-white">
+                        <div className="text-sm text-slate-300">
+                          {
+                            game.competitors?.find((c) => c.homeAway === "away")
+                              ?.name
+                          }
+                        </div>
+                      </td>
+                      <td>
+                        <div className="flex flex-col items-center text-center">
+                          <div className="text-sm text-slate-300">
+                            55/55/5555 55:5555
+                          </div>
+                        </div>
+                      </td>
+                      <td className="text-right text-white">
+                        <div className="flex flex-col">
+                          <div className="text-sm text-slate-300">
+                            {
+                              game.competitors?.find(
+                                (c) => c.homeAway === "home"
+                              )?.name
+                            }
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <span className="text-white">Picks made!</span>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -190,20 +258,23 @@ export default function Pools() {
     .data as PoolWithRelations;
 
   const { data: sessionData } = useSession();
-  const currentUserId = sessionData?.user.id ?? "";
+  const currentUser = sessionData?.user;
+  const currentMember = pool?.members.find(
+    (member) => member.userId === currentUser?.id
+  );
 
   const [activeTab, setActiveTab] = useState<string>("picks");
 
   const renderActiveTabContent = () => {
     switch (activeTab) {
       case "picks":
-        return <PoolPicksView pool={pool} />;
+        return <PoolPicksView pool={pool} member={currentMember} />;
       case "members":
         return <PoolMembersView pool={pool} />;
       case "settings":
         return <PoolSettingsView pool={pool} />;
       default:
-        return <PoolPicksView pool={pool} />;
+        return <PoolPicksView pool={pool} member={currentMember} />;
     }
   };
 
@@ -217,14 +288,16 @@ export default function Pools() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-full flex-col items-center pb-6">
-        <PoolHeader
-          pool={pool}
-          setActiveTab={setActiveTab}
-          activeTab={activeTab}
-        />
+      <main className="flex min-h-full flex-col items-center p-6">
+        <div>
+          <PoolHeader
+            pool={pool}
+            setActiveTab={setActiveTab}
+            activeTab={activeTab}
+          />
 
-        {renderActiveTabContent()}
+          {renderActiveTabContent()}
+        </div>
       </main>
     </>
   );

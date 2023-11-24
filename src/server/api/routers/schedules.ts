@@ -56,6 +56,10 @@ const groupGamesByDay = ({ games }: GroupGamesByDayProps) => {
     Saturday: [],
   };
 
+  games.sort((a, b) => {
+    return moment(a.date).unix() - moment(b.date).unix();
+  });
+
   games.forEach((game) => {
     const numericDayOfWeek = moment(game.date).day();
     const dayOfWeekName = getDayOfWeekName(numericDayOfWeek);

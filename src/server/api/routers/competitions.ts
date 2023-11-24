@@ -21,6 +21,10 @@ export const competitionsRouter = createTRPCRouter({
               equals: year,
             },
           },
+          include: {
+            competitors: true,
+            competitionStatus: true,
+          }
         });
 
         if (!competitions) {
